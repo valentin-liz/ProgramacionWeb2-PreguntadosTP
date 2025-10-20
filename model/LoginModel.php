@@ -12,8 +12,24 @@ class LoginModel
 
     public function getUserWith($user, $password)
     {
-        $sql = "SELECT * FROM usuarios WHERE usuario = '$user' AND password = '$password'";
-        $result = $this->conexion->query($sql);
-        return $result ?? [];
+        // Busco el usuario por nombre
+        $sql = "SELECT * FROM usuarios WHERE usuario = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("s", $user);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        $usuario = $resultado->fetch_assoc();
+
+        // Si no existe el usuario, retorno null
+        if (!$usuario) {
+            return null;
+        }
+
+        // Verifico si el password ingresado coincide con el hash guardado
+        if (password_verify($password, $usuario["password"])) {
+            return $usuario; // Login correcto
+        } else {
+            return null; // Contraseña incorrecta
+        }
     }
 }

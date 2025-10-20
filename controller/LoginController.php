@@ -25,8 +25,8 @@ class LoginController
     {
         $resultado = $this->model->getUserWith($_POST["usuario"], $_POST["password"]);
 
-        if (sizeof($resultado) > 0) {
-            $_SESSION["usuario"] = $_POST["usuario"];
+        if ($resultado) {
+            $_SESSION["usuario"] = $resultado["usuario"];
             $this->redirectToIndex();
         } else {
             $this->renderer->render("login", ["error" => "Usuario o clave incorrecta"]);
