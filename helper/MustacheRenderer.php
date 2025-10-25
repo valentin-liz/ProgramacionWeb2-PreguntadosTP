@@ -1,14 +1,16 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php'; // <-- cargamos Composer
+
 class MustacheRenderer{
     private $mustache;
     private $viewsFolder;
 
     public function __construct($partialsPathLoader){
-        Mustache_Autoloader::register();
-        $this->mustache = new Mustache_Engine(
+
+        $this->mustache = new \Mustache_Engine(
             array(
-            'partials_loader' => new Mustache_Loader_FilesystemLoader( $partialsPathLoader )
+            'partials_loader' => new \Mustache_Loader_FilesystemLoader( $partialsPathLoader )
         ));
         $this->viewsFolder = $partialsPathLoader;
     }
