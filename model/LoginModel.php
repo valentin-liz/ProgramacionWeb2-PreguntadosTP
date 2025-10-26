@@ -15,10 +15,18 @@ class LoginModel
         // Busco el usuario por nombre
         $sql = "SELECT * FROM usuarios WHERE usuario = ?";
         $stmt = $this->conexion->prepare($sql);
+
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . $this->conexion->error);
+        }
+
         $stmt->bind_param("s", $user);
         $stmt->execute();
+
         $resultado = $stmt->get_result();
         $usuario = $resultado->fetch_assoc();
+
+        $stmt->close();
 
         // Si no existe el usuario, retorno null
         if (!$usuario) {

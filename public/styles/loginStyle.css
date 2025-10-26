@@ -2,6 +2,7 @@
     width: 25vw !important;
 }
 
+
 @media (max-width: 1400px) {
     .loginFormContainer {
         width: 30vw !important;

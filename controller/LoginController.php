@@ -23,14 +23,21 @@ class LoginController
 
     public function login()
     {
-        $resultado = $this->model->getUserWith($_POST["usuario"], $_POST["password"]);
 
-        if ($resultado) {
-            $_SESSION["usuario"] = $resultado["usuario"];
-            $this->redirectToIndex();
+        if (isset($_POST["usuario"]) && isset($_POST["password"])) {
+            $resultado = $this->model->getUserWith($_POST["usuario"], $_POST["password"]);
+
+            if ($resultado) {
+                $_SESSION["usuario"] = $resultado["usuario"];
+                $this->redirectToIndex();
+            } else {
+                $this->renderer->render("login", ["error" => "Usuario o clave incorrecta"]);
+            }
         } else {
-            $this->renderer->render("login", ["error" => "Usuario o clave incorrecta"]);
+            // Primera vez que se entra al login, sin enviar form
+            $this->renderer->render("login");
         }
+
     }
 
     public function logout()
