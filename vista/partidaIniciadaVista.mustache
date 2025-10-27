@@ -1,0 +1,91 @@
+<div class="container text-center mt-5">
+    <h2 class="mb-4">¡Tu partida ha comenzado!</h2>
+    <p class="mb-4">Girá la ruleta para elegir una categoría:</p>
+
+    <!-- Ruleta interactiva -->
+    <div class="ruleta-container mt-4">
+        <div id="ruleta" class="ruleta">
+            <div class="sector" style="background-color: yellow;">Historia</div>
+            <div class="sector" style="background-color: green;">Ciencia</div>
+            <div class="sector" style="background-color: blue;">Deporte</div>
+            <div class="sector" style="background-color: orange;">Arte</div>
+            <div class="sector" style="background-color: red;">Entretenimiento</div>
+            <div class="sector" style="background-color: purple;">Geografía</div>
+        </div>
+        <button id="girarRuleta" class="btn btn-warning mt-3">Girar</button>
+    </div>
+
+    <!-- Categorías -->
+    <div class="categorias mt-4">
+        <p><strong>Categorías:</strong> Historia, Ciencia, Deporte, Arte, Entretenimiento, Geografía</p>
+    </div>
+
+    <!-- Volver al inicio -->
+    <a href="/?controller=Home&method=index" class="btn btn-secondary mt-3">Volver al inicio</a>
+</div>
+
+<!-- Estilos para la ruleta -->
+<style>
+    .ruleta-container {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .ruleta {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%; /* Esto hace que el contenedor sea un círculo */
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        transform: rotate(0deg);
+        transition: transform 4s ease-out;
+        overflow: hidden; /* Asegura que no haya contenido fuera del círculo */
+    }
+
+    .sector {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        border: 1px solid #fff; /* Opcional: agrega un borde blanco entre los sectores */
+    }
+
+    /* Estilo para el botón "Girar" */
+    .btn-warning {
+        background-color: #f39c12;
+        border-color: #e67e22;
+    }
+
+    .btn-warning:hover {
+        background-color: #e67e22;
+        border-color: #d35400;
+    }
+
+    .categorias {
+        font-size: 18px;
+        color: #333;
+    }
+</style>
+
+<!-- Script para la animación de la ruleta -->
+<script>
+    document.getElementById('girarRuleta').addEventListener('click', function() {
+        // Genera un valor aleatorio para la rotación de la ruleta entre 3600 y 3960 grados
+        const randomDegree = Math.floor(Math.random() * 360) + 3600;
+
+        // Usando template literals para asignar el valor correctamente
+        const ruleta = document.getElementById('ruleta');
+        ruleta.style.transform = `rotate(${randomDegree}deg)`;  // Utilizamos las comillas invertidas
+    });
+</script>

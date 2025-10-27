@@ -48,7 +48,7 @@ class LoginController
 
     public function redirectToIndex()
     {
-        header("Location: /");
+        header("Location: index.php?controller=home&method=mostrarHome");
         exit;
     }
 
