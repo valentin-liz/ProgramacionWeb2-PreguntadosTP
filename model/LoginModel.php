@@ -34,7 +34,7 @@ class LoginModel
         }
 
         // Verifico si el password ingresado coincide con el hash guardado
-        if (password_verify($password, $usuario["password"])) {
+        if (password_verify($password, $usuario["contrasenia_hash"])) {
             return $usuario; // Login correcto
         } else {
             return null; // Contraseña incorrecta
