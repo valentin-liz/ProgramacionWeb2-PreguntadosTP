@@ -15,7 +15,7 @@ class PartidaController
 
     public function iniciarPartida()
     {
-        echo $this->renderer->render("partidaIniciadaVista.mustache");
+        echo $this->renderer->render("partidaIniciada");
     }
 }
 ?>

@@ -7,7 +7,7 @@ class HomeController{
     }
 
     public function mostrarHome(){
-        echo $this->renderer->render("vista/homeVista.mustache");
+        $this->renderer->render("home");
     }
 }
 ?>
