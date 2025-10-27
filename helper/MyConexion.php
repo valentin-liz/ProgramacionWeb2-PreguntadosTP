@@ -20,4 +20,9 @@ class MyConexion
         }
         return null;
     }
+
+    public function getConexion()
+    {
+        return $this->conexion;
+    }
 }
