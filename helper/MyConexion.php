@@ -5,9 +5,9 @@ class MyConexion
 
     private $conexion;
 
-    public function __construct($server, $user, $pass, $database)
+    public function __construct($server, $user, $pass, $database, $port = 3307)
     {
-        $this->conexion = new mysqli($server, $user, $pass, $database);
+        $this->conexion = new mysqli($server, $user, $pass, $database, $port);
         if ($this->conexion->error) { die("Error en la conexión: " . $this->conexion->error); }
     }
 

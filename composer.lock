@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44b7b2c58a30151ae57314c84e2abdd5",
+    "content-hash": "071586d19f5409de22b3235d85d8476c",
     "packages": [
         {
             "name": "mustache/mustache",
