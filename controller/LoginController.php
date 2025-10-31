@@ -18,7 +18,10 @@ class LoginController
 
     public function loginForm()
     {
-        $this->renderer->render("login");
+        $data = [
+            "logueado" => false
+        ];
+        $this->renderer->render("login", $data);
     }
 
     public function login()
