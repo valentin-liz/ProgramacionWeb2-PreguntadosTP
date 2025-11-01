@@ -25,7 +25,8 @@ class ConfigFactory
             $this->config["server"],
             $this->config["user"],
             $this->config["pass"],
-            $this->config["database"]
+            $this->config["database"],
+            $this->config["port"]
         );
 
         $this->renderer = new MustacheRenderer("vista");
