@@ -182,3 +182,12 @@ ALTER TABLE `respuesta`
 COMMIT;
 
 -- --------------------------------------------------------
+
+--
+-- Agregad de columna puntos para la tabla `usuarios`
+--
+
+ALTER TABLE usuarios
+    ADD COLUMN puntos INT DEFAULT 0;
+
+
