@@ -25,7 +25,13 @@ function crearRuleta() {
 // función callback
 function alertResultado(segmento) {
     const categoria = segmento.text;
-    alert("Salió la categoría: " + categoria);
+    const categoriaElemento = document.getElementById("categoriaSeleccionada");
+    categoriaElemento.textContent = categoria;
+
+    const modal = new bootstrap.Modal(document.getElementById("categoriaModal"));
+    console.log("Categoría: " + categoria);
+    modal.show();
+
 }
 
 // botón girar
