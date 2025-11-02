@@ -6,6 +6,7 @@ include_once("controller/LoginController.php");
 include_once("controller/HomeController.php");
 include_once("controller/PartidaController.php");
 include_once("model/LoginModel.php");
+include_once("model/HomeModel.php");
 require_once __DIR__ . '/../vendor/autoload.php';
 include_once ("helper/MustacheRenderer.php");
 
@@ -35,7 +36,7 @@ class ConfigFactory
 
         $this->objetos["LoginController"] = new LoginController(new LoginModel($this->conexion->getConexion()), $this->renderer);
 
-        $this->objetos["HomeController"] = new HomeController($this->renderer);
+        $this->objetos["HomeController"] = new HomeController(new HomeModel($this->conexion->getConexion()), $this->renderer);
 
         $this->objetos["PartidaController"] = new PartidaController($this->renderer);
 
