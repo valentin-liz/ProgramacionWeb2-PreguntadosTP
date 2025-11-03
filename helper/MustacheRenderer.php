@@ -2,26 +2,30 @@
 
 require_once __DIR__ . '/../vendor/autoload.php'; // <-- cargamos Composer
 
-class MustacheRenderer{
+class MustacheRenderer
+{
     private $mustache;
     private $viewsFolder;
 
-    public function __construct($partialsPathLoader){
+    public function __construct($partialsPathLoader)
+    {
 
         $this->mustache = new \Mustache_Engine(
             array(
-            'partials_loader' => new \Mustache_Loader_FilesystemLoader( $partialsPathLoader )
-        ));
+                'partials_loader' => new \Mustache_Loader_FilesystemLoader($partialsPathLoader)
+            ));
         $this->viewsFolder = $partialsPathLoader;
     }
 
-    public function render($contentFile , $data = array() ){
-        echo  $this->generateHtml(  $this->viewsFolder . '/' . $contentFile . "Vista.mustache" , $data);
+    public function render($contentFile, $data = array())
+    {
+        echo $this->generateHtml($this->viewsFolder . '/' . $contentFile . "Vista.mustache", $data);
     }
 
-    public function generateHtml($contentFile, $data = array()) {
-        $contentAsString = file_get_contents(  $this->viewsFolder .'/header.mustache');
-        $contentAsString .= file_get_contents( $contentFile );
+    public function generateHtml($contentFile, $data = array())
+    {
+        $contentAsString = file_get_contents($this->viewsFolder . '/header.mustache');
+        $contentAsString .= file_get_contents($contentFile);
         $contentAsString .= file_get_contents($this->viewsFolder . '/footer.mustache');
         return $this->mustache->render($contentAsString, $data);
     }

@@ -184,10 +184,23 @@ COMMIT;
 -- --------------------------------------------------------
 
 --
--- Agregad de columna puntos para la tabla `usuarios`
+-- Agregado de columna puntos para la tabla `usuarios`
 --
 
 ALTER TABLE usuarios
     ADD COLUMN puntos INT DEFAULT 0;
+
+-- --------------------------------------------------------
+
+--
+-- Volcado de datos para la tabla `categoria`
+--
+
+INSERT INTO categoria (id, nombre, color)
+VALUES (1, 'Ciencia', '#31C950'),
+       (2, 'Deportes', '#FF692A'),
+       (3, 'Historia', '#FDC745'),
+       (4, 'Geografía', '#51A2FF');
+
 
 
