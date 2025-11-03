@@ -202,5 +202,65 @@ VALUES (1, 'Ciencia', '#31C950'),
        (3, 'Historia', '#FDC745'),
        (4, 'Geografía', '#51A2FF');
 
+-- --------------------------------------------------------
+
+--
+-- Cambiar 'correcta' de tinyint a boolean para la tabla `pregunta`
+--
+
+ALTER TABLE respuesta
+    MODIFY COLUMN correcta BOOLEAN DEFAULT FALSE;
+
+
+-- --------------------------------------------------------
+
+--
+-- Volcado de datos para la tabla `pregunta`
+--
+
+-- 🧪 CATEGORÍA: CIENCIA
+INSERT INTO pregunta (id, enunciado, categoria_id, dificultad)
+VALUES (1, '¿Cuál es el planeta más grande del sistema solar?', 1, 1);
+
+INSERT INTO respuesta (id, pregunta_id, texto_opcion, correcta)
+VALUES
+    (1, 1, 'Júpiter', TRUE),
+    (2, 1, 'Saturno', FALSE),
+    (3, 1, 'Marte', FALSE),
+    (4, 1, 'Tierra', FALSE);
+
+-- ⚽ CATEGORÍA: DEPORTES
+INSERT INTO pregunta (id, enunciado, categoria_id, dificultad)
+VALUES (2, '¿Cuántos jugadores tiene un equipo de fútbol en el campo?', 2, 1);
+
+INSERT INTO respuesta (id, pregunta_id, texto_opcion, correcta)
+VALUES
+    (5, 2, '11', TRUE),
+    (6, 2, '10', FALSE),
+    (7, 2, '12', FALSE),
+    (8, 2, '9', FALSE);
+
+-- 🏛️ CATEGORÍA: HISTORIA
+INSERT INTO pregunta (id, enunciado, categoria_id, dificultad)
+VALUES (3, '¿En qué año comenzó la Primera Guerra Mundial?', 3, 1);
+
+INSERT INTO respuesta (id, pregunta_id, texto_opcion, correcta)
+VALUES
+    (9, 3, '1914', TRUE),
+    (10, 3, '1939', FALSE),
+    (11, 3, '1920', FALSE),
+    (12, 3, '1905', FALSE);
+
+-- 🌍 CATEGORÍA: GEOGRAFÍA
+INSERT INTO pregunta (id, enunciado, categoria_id, dificultad)
+VALUES (4, '¿Cuál es el río más largo del mundo?', 4, 1);
+
+INSERT INTO respuesta (id, pregunta_id, texto_opcion, correcta)
+VALUES
+    (13, 4, 'Nilo', TRUE),
+    (14, 4, 'Amazonas', FALSE),
+    (15, 4, 'Yangtsé', FALSE),
+    (16, 4, 'Misisipi', FALSE);
+
 
 
