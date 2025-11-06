@@ -3,9 +3,11 @@ include_once("helper/MyConexion.php");
 include_once("helper/IncludeFileRenderer.php");
 include_once("helper/NewRouter.php");
 include_once("controller/LoginController.php");
+include_once("controller/RegistrarController.php");
 include_once("controller/HomeController.php");
 include_once("controller/PartidaController.php");
 include_once("model/LoginModel.php");
+include_once("model/RegistrarModel.php");
 include_once("model/HomeModel.php");
 include_once("model/PartidaModel.php");
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -37,9 +39,12 @@ class ConfigFactory
 
         $this->objetos["LoginController"] = new LoginController(new LoginModel($this->conexion->getConexion()), $this->renderer);
 
+        $this->objetos["RegistrarController"] = new RegistrarController(new RegistrarModel($this->conexion->getConexion()), $this->renderer);
+
         $this->objetos["HomeController"] = new HomeController(new HomeModel($this->conexion->getConexion()), $this->renderer);
 
         $this->objetos["PartidaController"] = new PartidaController(new PartidaModel($this->conexion->getConexion()), $this->renderer);
+
 
     }
 
