@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil</title>
+    <link rel="stylesheet" href="../public/styles/perfilStyle.css">
+</head>
+<body>
+
+<div class="perfil-container">
+  <h2>Mi Perfil</h2>
+
+  {{#usuario.foto_perfil}}
+    <img src="{{usuario.foto_perfil}}" alt="Foto de perfil" class="foto-perfil">
+  {{/usuario.foto_perfil}}
+
+  <form action="/perfil/actualizarPerfil" method="POST" enctype="multipart/form-data">
+    <label>Nombre:</label>
+    <input type="text" name="nombre" value="{{usuario.nombre}}">
+
+    <label>Apellido:</label>
+    <input type="text" name="apellido" value="{{usuario.apellido}}">
+
+    <label>Año de nacimiento:</label>
+    <input type="number" name="anio_nacimiento" value="{{usuario.anio_nacimiento}}">
+
+    <label>Sexo:</label>
+    <select name="sexo">
+      <option value="Masculino" {{#is_masculino}}selected{{/is_masculino}}>Masculino</option>
+      <option value="Femenino" {{#is_femenino}}selected{{/is_femenino}}>Femenino</option>
+      <option value="Otro" {{#is_otro}}selected{{/is_otro}}>Otro</option>
+    </select>
+
+    <label>País / Ciudad:</label>
+    <input type="text" name="pais_ciudad" value="{{usuario.pais_ciudad}}">
+
+    <label>Email:</label>
+    <input type="email" name="email" value="{{usuario.email}}">
+
+    <label>Foto de perfil:</label>
+    <input type="file" name="foto_perfil" accept="image/*">
+
+    <button type="submit">Guardar cambios</button>
+  </form>
+</div>
+
+
+
+</body>
+</html>
