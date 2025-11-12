@@ -4,14 +4,16 @@ include_once("helper/IncludeFileRenderer.php");
 include_once("helper/NewRouter.php");
 include_once("controller/LoginController.php");
 include_once("controller/RegistrarController.php");
+include_once("controller/PerfilController.php");
 include_once("controller/HomeController.php");
 include_once("controller/PartidaController.php");
 include_once("model/LoginModel.php");
 include_once("model/RegistrarModel.php");
+include_once("model/UsuarioModel.php");
 include_once("model/HomeModel.php");
 include_once("model/PartidaModel.php");
 require_once __DIR__ . '/../vendor/autoload.php';
-include_once ("helper/MustacheRenderer.php");
+include_once("helper/MustacheRenderer.php");
 
 class ConfigFactory
 {
