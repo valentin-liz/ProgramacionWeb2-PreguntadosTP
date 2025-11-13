@@ -262,5 +262,16 @@ VALUES
     (15, 4, 'Yangtsé', FALSE),
     (16, 4, 'Misisipi', FALSE);
 
+-- --------------------------------------------------------
+
+--
+-- Agregado de columna partidas_jugadas a la tabla `usuarios`
+--
+
+ALTER TABLE usuarios
+    ADD COLUMN partidas_jugadas INT DEFAULT 0;
+
+
+
 
 

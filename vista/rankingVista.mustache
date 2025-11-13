@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+
+<h1 class="fw-bold text-center mt-5 mb-5">Ranking</h1>
+
+<div class="container p-4 rounded border border-light-subtle">
+
+    <table class="table table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">Puesto</th>
+            <th scope="col">Jugador</th>
+            <th scope="col">Ratio</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#usuarios}}
+            <tr>
+                <th scope="row">{{puesto}}</th>
+                <td>{{usuario}}</td>
+                <td>{{ratio}}</td>
+            </tr>
+        {{/usuarios}}
+        </tbody>
+    </table>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+</html>
