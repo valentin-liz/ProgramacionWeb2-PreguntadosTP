@@ -16,6 +16,7 @@ class RankingModel
     usuario,
     puntos,
     partidas_jugadas,
+    foto_perfil,
     CASE 
         WHEN partidas_jugadas > 0 THEN puntos / partidas_jugadas
         ELSE 0

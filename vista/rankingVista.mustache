@@ -23,7 +23,11 @@
         </thead>
         <tbody>
         {{#usuarios}}
-            <tr>
+            <tr class="fila-jugador"
+                data-nombre="{{usuario}}"
+                data-puntos="{{puntos}}"
+                data-partidas="{{partidas_jugadas}}"
+                data-foto="{{foto_perfil}}">
                 <th scope="row">{{puesto}}</th>
                 <td>{{usuario}}</td>
                 <td>{{ratio}}</td>
@@ -33,7 +37,27 @@
     </table>
 
 
+    <!-- Modal jugador -->
+    <div class="modal fade" id="modalJugador" tabindex="-1" aria-labelledby="modalJugadorLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalJugadorLabel">Perfil del jugador</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="fotoJugador" src="" class="rounded-circle mb-3" width="120" height="120" alt="Foto de perfil">
+                    <h4 class="fs-3" id="nombreJugador"></h4>
+                    <p class="mb-1">Puntos totales: <span id="puntosJugador"></span></p>
+                    <p class="mb-0">Partidas jugadas: <span id="partidasJugador"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<script src="../public/js/ranking.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
