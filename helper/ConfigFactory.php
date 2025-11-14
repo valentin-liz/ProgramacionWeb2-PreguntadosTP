@@ -4,16 +4,16 @@ include_once("helper/IncludeFileRenderer.php");
 include_once("helper/NewRouter.php");
 include_once("controller/LoginController.php");
 include_once("controller/RegistrarController.php");
-include_once("controller/PerfilController.php");
 include_once("controller/HomeController.php");
 include_once("controller/PartidaController.php");
+include_once("controller/RankingController.php");
 include_once("model/LoginModel.php");
 include_once("model/RegistrarModel.php");
-include_once("model/PerfilModel.php");
 include_once("model/HomeModel.php");
 include_once("model/PartidaModel.php");
+include_once("model/RankingModel.php");
 require_once __DIR__ . '/../vendor/autoload.php';
-include_once("helper/MustacheRenderer.php");
+include_once ("helper/MustacheRenderer.php");
 
 class ConfigFactory
 {
@@ -47,7 +47,7 @@ class ConfigFactory
 
         $this->objetos["PartidaController"] = new PartidaController(new PartidaModel($this->conexion->getConexion()), $this->renderer);
 
-        $this->objetos["PerfilController"] = new PerfilController(new PerfilModel($this->conexion->getConexion()), $this->renderer);
+        $this->objetos["RankingController"] = new RankingController(new RankingModel($this->conexion->getConexion()), $this->renderer);
 
 
 
