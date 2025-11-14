@@ -9,7 +9,7 @@ include_once("controller/HomeController.php");
 include_once("controller/PartidaController.php");
 include_once("model/LoginModel.php");
 include_once("model/RegistrarModel.php");
-include_once("model/UsuarioModel.php");
+include_once("model/PerfilModel.php");
 include_once("model/HomeModel.php");
 include_once("model/PartidaModel.php");
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -46,6 +46,9 @@ class ConfigFactory
         $this->objetos["HomeController"] = new HomeController(new HomeModel($this->conexion->getConexion()), $this->renderer);
 
         $this->objetos["PartidaController"] = new PartidaController(new PartidaModel($this->conexion->getConexion()), $this->renderer);
+
+        $this->objetos["PerfilController"] = new PerfilController(new PerfilModel($this->conexion->getConexion()), $this->renderer);
+
 
 
     }

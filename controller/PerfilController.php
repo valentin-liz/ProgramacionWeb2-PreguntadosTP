@@ -1,5 +1,5 @@
 <?php
-include_once("model/UsuarioModel.php");
+include_once("model/PerfilModel.php");
 include_once("helper/AuthHelper.php");
 
 class PerfilController

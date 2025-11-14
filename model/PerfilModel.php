@@ -1,6 +1,6 @@
 <?php
 
-class UsuarioModel
+class PerfilModel
 {
     private $db;
 
