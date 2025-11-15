@@ -271,7 +271,111 @@ VALUES
 ALTER TABLE usuarios
     ADD COLUMN partidas_jugadas INT DEFAULT 0;
 
+-- Base para las preguntas
+CREATE TABLE preguntas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    categoria VARCHAR(50) NOT NULL,
+    pregunta TEXT NOT NULL,
+    opcion_a VARCHAR(255) NOT NULL,
+    opcion_b VARCHAR(255) NOT NULL,
+    opcion_c VARCHAR(255) NOT NULL,
+    opcion_d VARCHAR(255) NOT NULL,
+    correcta CHAR(1) NOT NULL
+);
+
+--Preguntas Geografia
+
+INSERT INTO preguntas (categoria, pregunta, opcion_a, opcion_b, opcion_c, opcion_d, correcta) VALUES
+('Geografía','¿Cuál es el río más largo del mundo?','Amazonas','Nilo','Yangtsé','Misisipi','A'),
+('Geografía','¿En qué país se encuentra la Torre Eiffel?','Italia','Alemania','Francia','España','C'),
+('Geografía','¿Cuál es la capital de Australia?','Sídney','Melbourne','Canberra','Perth','C'),
+('Geografía','¿Qué océano es el más grande?','Atlántico','Índico','Pacífico','Ártico','C'),
+('Geografía','¿En qué continente está Egipto?','Asia','Europa','África','Oceanía','C'),
+('Geografía','¿Qué país tiene mayor población?','India','China','Estados Unidos','Indonesia','A'),
+('Geografía','¿Dónde está el Monte Everest?','China','Nepal','Tíbet','India','B'),
+('Geografía','¿Capital de Canadá?','Toronto','Ottawa','Vancouver','Montreal','B'),
+('Geografía','¿Qué país tiene forma de bota?','Chile','Portugal','Italia','Grecia','C'),
+('Geografía','¿Capital de Japón?','Osaka','Kioto','Tokio','Nara','C'),
+('Geografía','¿Cuál es el país más grande del mundo?','China','Canadá','Estados Unidos','Rusia','D'),
+('Geografía','¿Cuál es el desierto más grande?','Sahara','Gobi','Atacama','Kalahari','A'),
+('Geografía','¿En qué país queda Machu Picchu?','México','Perú','Colombia','Bolivia','B'),
+('Geografía','¿Qué país tiene más islas?','España','Suecia','Japón','Filipinas','B'),
+('Geografía','¿Cuál es el mar más salado del mundo?','Mar Rojo','Mar Muerto','Mar Caspio','Mar Egeo','B'),
+('Geografía','¿Cuál es la capital de Brasil?','Río de Janeiro','São Paulo','Brasilia','Salvador','C'),
+('Geografía','¿Qué país está entre México y Guatemala?','Belice','Honduras','Cuba','Panamá','A'),
+('Geografía','¿En qué país se encuentra el río Danubio?','Alemania','España','Francia','Italia','A'),
+('Geografía','¿Cuál es la capital de Islandia?','Reikiavik','Oslo','Copenhague','Estocolmo','A'),
+('Geografía','¿Cuál es el lago más grande del mundo?','Titicaca','Baikal','Caspio','Victoria','C');
+
+--Preguntas Ciencia
+
+INSERT INTO preguntas (categoria, pregunta, opcion_a, opcion_b, opcion_c, opcion_d, correcta) VALUES
+('Ciencia','¿Cuál es el planeta más grande del sistema solar?','Tierra','Júpiter','Saturno','Urano','B'),
+('Ciencia','¿Qué gas respiramos principalmente?','Nitrógeno','Oxígeno','Helio','Dióxido de carbono','A'),
+('Ciencia','¿Qué órgano bombea sangre?','Pulmón','Corazón','Hígado','Riñón','B'),
+('Ciencia','¿Cuál es el metal más ligero?','Plata','Litio','Sodio','Aluminio','B'),
+('Ciencia','¿Cuántos huesos tiene el cuerpo humano adulto?','106','206','306','406','B'),
+('Ciencia','¿Qué célula transporta oxígeno?','Neurona','Glóbulo rojo','Plaqueta','Glóbulo blanco','B'),
+('Ciencia','¿Cuál es la velocidad de la luz?','300 km/s','300.000 km/s','30.000 km/s','3000 km/s','B'),
+('Ciencia','¿Qué vitamina produce el sol?','Vitamina C','Vitamina D','Vitamina A','Vitamina K','B'),
+('Ciencia','¿Cuál es el ácido del estómago?','Ácido láctico','Ácido clorhídrico','Ácido úrico','Ácido acético','B'),
+('Ciencia','¿Cuál es el planeta rojo?','Mercurio','Venus','Marte','Saturno','C'),
+('Ciencia','¿Qué animal pone huevos?','Gato','Perro','Gallina','Cabra','C'),
+('Ciencia','¿Cuál es el órgano más grande del cuerpo?','Cerebro','Hígado','Piel','Intestino','C'),
+('Ciencia','¿Qué tipo de sangre es donante universal?','A+','B+','AB+','O-','D'),
+('Ciencia','¿Cuál es la unidad básica de la vida?','Tejido','Célula','Molécula','Átomo','B'),
+('Ciencia','¿Cuál es el animal más rápido en tierra?','León','Guepardo','Tigre','Lobo','B'),
+('Ciencia','¿Qué fuerza nos mantiene en la tierra?','Electricidad','Inercia','Gravedad','Magnetismo','C'),
+('Ciencia','¿Qué gas necesitan las plantas para fotosíntesis?','CO2','O2','H2','N2','A'),
+('Ciencia','¿Cuál es el elemento químico H?','Hidrógeno','Helio','Mercurio','Hafnio','A'),
+('Ciencia','¿Cuántos planetas tiene el sistema solar?','7','8','9','6','B'),
+('Ciencia','¿Cuál es el órgano que filtra la sangre?','Riñón','Pulmón','Estómago','Intestino','A');
 
 
+--Preguntas Historia
+
+INSERT INTO preguntas (categoria, pregunta, opcion_a, opcion_b, opcion_c, opcion_d, correcta) VALUES
+('Historia','¿Quién descubrió América?','Magallanes','Cristóbal Colón','Vespucci','Pizarro','B'),
+('Historia','¿En qué año cayó el Imperio Romano?','476 d.C.','1066 d.C.','1492 d.C.','320 d.C.','A'),
+('Historia','¿Quién fue el primer presidente de EE.UU.?','Lincoln','Washington','Jefferson','Adams','B'),
+('Historia','¿Qué civilización construyó las pirámides?','Romanos','Griegos','Egipcios','Mayas','C'),
+('Historia','¿Qué guerra fue entre EEUU y la URSS?','Guerra fría','Primera guerra','Segunda guerra','Guerra napoleónica','A'),
+('Historia','¿Quién fue el líder nazi?','Lenin','Mussolini','Hitler','Stalin','C'),
+('Historia','¿Qué imperio construyó Machu Picchu?','Azteca','Maya','Inca','Olmeca','C'),
+('Historia','¿Cuál fue la primera civilización?','Egipto','Mesopotamia','Roma','Grecia','B'),
+('Historia','¿Qué barco se hundió en 1912?','Titanic','Britannic','Lusitania','Victoria','A'),
+('Historia','¿Quién escribió la Ilíada?','Sófocles','Homero','Platón','Aristóteles','B'),
+('Historia','¿Quién liberó Argentina?','San Martín','Belgrano','Sarmiento','Rosas','A'),
+('Historia','¿Qué revolución fue en 1789?','Industrial','Rusa','Francesa','China','C'),
+('Historia','¿Quién inventó la bombilla?','Edison','Tesla','Newton','Einstein','A'),
+('Historia','¿Quién fue Cleopatra?','Reina romana','Reina egipcia','Reina griega','Reina persa','B'),
+('Historia','¿Qué imperio usaba samuráis?','China','Japón','Mongolia','Corea','B'),
+('Historia','¿Qué país inició la Primera Guerra Mundial?','Serbia','Alemania','Austria-Hungría','Francia','C'),
+('Historia','¿Quién conquistó gran parte del mundo con su ejército?','Julio César','Alejandro Magno','Napoleón','Aníbal','B'),
+('Historia','¿Qué muro cayó en 1989?','Muro de París','Muro de Tokio','Muro de Berlín','Muro de Moscú','C'),
+('Historia','¿Qué civilización creó el calendario solar?','Aztecas','Mayas','Incas','Vikingos','B');
 
 
+--Preguntas Deportes
+
+INSERT INTO preguntas (categoria, pregunta, opcion_a, opcion_b, opcion_c, opcion_d, correcta) VALUES
+('Deportes','¿Cuántos jugadores hay en un equipo de fútbol?','9','10','11','12','C'),
+('Deportes','¿Quién ganó el Mundial 2022?','Brasil','Francia','Argentina','Alemania','C'),
+('Deportes','¿Qué deporte practica Messi?','Básquet','Fútbol','Tenis','Rugby','B'),
+('Deportes','¿Dónde se originó el judo?','China','Corea','Japón','Tailandia','C'),
+('Deportes','¿Cuántos sets se juegan en tenis?','3 o 5','2','4','6','A'),
+('Deportes','¿Qué deporte usa tabla y olas?','Handball','Surf','Esgrima','Hockey','B'),
+('Deportes','¿Quién tiene más títulos de Fórmula 1?','Senna','Hamilton','Vettel','Schumacher','B'),
+('Deportes','¿Qué selección ganó más mundiales?','Brasil','Alemania','Italia','Argentina','A'),
+('Deportes','¿Quién es el “mejor basquetbolista de la historia”?','Jordan','Kobe','LeBron','Curry','A'),
+('Deportes','¿Qué país inventó el rugby?','Australia','Irlanda','Inglaterra','Estados Unidos','C'),
+('Deportes','¿Qué deporte se juega en Wimbledon?','Tenis','Fútbol','Golf','Hockey','A'),
+('Deportes','¿Qué corredor fue apodado “Bolt”?','Tyson Gay','Usain Bolt','Mo Farah','Gatlin','B'),
+('Deportes','¿Qué deporte usa arco y flecha?','Tiro','Esgrima','Arquería','Triatlón','C'),
+('Deportes','¿Qué seleccionador ganó la Copa América 2021?','Scaloni','Bielsa','Sampaoli','Martino','A'),
+('Deportes','¿En qué deporte se usa tatami?','Natación','Judo','Ciclismo','Boxeo','B'),
+('Deportes','¿Cuál es el deporte más popular del mundo?','Tenis','Fútbol','Críquet','Rugby','B'),
+('Deportes','¿Qué país organiza el Tour de Francia?','España','Italia','Francia','Alemania','C'),
+('Deportes','¿Quién ganó 6 anillos con Chicago Bulls?','Jordan','Pippen','Rodman','Kerr','A'),
+('Deportes','¿Qué boxeador decía “soy el más grande”?','Ali','Tyson','Frazier','Pacquiao','A'),
+('Deportes','¿Qué deporte combina correr, nadar y pedalear?','CrossFit','Triatlón','Pentatlón','Ironman','B');
