@@ -2,13 +2,11 @@
 
 class PartidaController
 {
-
     private $model;
     private $renderer;
 
     public function __construct($model, $renderer)
     {
-
         $this->model = $model;
         $this->renderer = $renderer;
     }
@@ -17,16 +15,13 @@ class PartidaController
     {
         $categorias = $this->model->getCategorias();
 
-        // Agregar campo 'last' para el JS
         foreach ($categorias as $i => &$cat) {
             $cat['last'] = ($i === count($categorias) - 1);
         }
 
-        $data = [
-            'categorias' => $categorias
-        ];
-
-        $this->renderer->render("partidaIniciada", $data);
+        $this->renderer->render("partidaIniciada", [
+            "categorias" => $categorias
+        ]);
     }
 
     public function jugarPartida()
@@ -43,34 +38,26 @@ class PartidaController
             die("No hay preguntas cargadas para la categoría: " . $categoria);
         }
 
-        $data = [
+        $this->renderer->render("pregunta", [
             "categoria" => $categoria,
             "pregunta" => $pregunta
-        ];
-
-        $this->renderer->render("pregunta", $data);
+        ]);
     }
 
-     public function validarRespuesta()
+    public function validarRespuesta()
     {
+        // DEVOLVER JSON, NO RENDERIZAR
+        header("Content-Type: application/json");
+
         $id = $_POST["id_pregunta"];
         $respuesta = $_POST["respuesta"];
-        $categoria = $_POST["categoria"];
 
-        // PEDIR LA RESPUESTA CORRECTA
-        $sql = "SELECT correcta FROM preguntas WHERE id = ?";
-        $stmt = $this->model->getConexion()->prepare($sql);
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $resultado = $stmt->get_result()->fetch_assoc();
+        $correcta = $this->model->getRespuestaCorrecta($id);
 
-        $esCorrecta = ($respuesta === $resultado["correcta"]);
+        $esCorrecta = ($respuesta === $correcta["correcta"]);
 
-        $data = [
-            "esCorrecta" => $esCorrecta,
-            "categoria" => $categoria
-        ];
-
-        $this->renderer->render("pregunta", $data);
+        echo json_encode([
+            "correcta" => $esCorrecta
+        ]);
     }
 }

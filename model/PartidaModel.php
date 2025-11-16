@@ -2,14 +2,7 @@
 
 class PartidaModel
 {
-
     private $conexion;
-
-    public function getConexion()
-    {
-        return $this->conexion;
-    }
-
 
     public function __construct($conexion)
     {
@@ -29,7 +22,20 @@ class PartidaModel
         $stmt = $this->conexion->prepare($sql);
         $stmt->bind_param("s", $categoria);
         $stmt->execute();
-        $resultado = $stmt->get_result();
-        return $resultado->fetch_assoc();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function getRespuestaCorrecta($idPregunta)
+    {
+        $sql = "SELECT correcta FROM preguntas WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $idPregunta);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function getConexion()
+    {
+        return $this->conexion;
     }
 }
