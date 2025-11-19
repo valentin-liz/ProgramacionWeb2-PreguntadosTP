@@ -18,7 +18,12 @@ class PartidaModel
 
     public function getPreguntaPorCategoria($categoria)
     {
-        $sql = "SELECT * FROM preguntas WHERE categoria = ? ORDER BY RAND() LIMIT 1";
+        $sql = "SELECT p.*
+            FROM preguntas p
+            JOIN categoria c ON p.categoria_id = c.id
+            WHERE c.nombre = ?
+            ORDER BY RAND()
+            LIMIT 1";
         $stmt = $this->conexion->prepare($sql);
         $stmt->bind_param("s", $categoria);
         $stmt->execute();
