@@ -20,6 +20,11 @@ class PerfilController
         $usuario = $_SESSION['usuario'];
         $datos = $this->model->obtenerUsuario($usuario);
 
+        // Marcar el sexo seleccionado para Mustache
+        $datos["is_masculino"] = ($datos["sexo"] === "Masculino");
+        $datos["is_femenino"]  = ($datos["sexo"] === "Femenino");
+        $datos["is_otro"]      = ($datos["sexo"] === "Otro");
+
         $this->renderer->render("perfil", [
             "logueado" => true,
             "usuario" => $datos
@@ -44,7 +49,7 @@ class PerfilController
             ];
 
             // Ejecutar actualización
-            $ok = $this->model->actualizarPerfil($datos, $usuario);
+            $ok = $this->model->actualizarPerfil($datos, $usuario, $_FILES);
 
             if ($ok) {
                 // Si usás rutas limpias (htaccess)

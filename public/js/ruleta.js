@@ -46,6 +46,10 @@ function alertResultado(segmento) {
     const modal = new bootstrap.Modal(document.getElementById("categoriaModal"));
     console.log("Categoría seleccionada:", categoria);
     modal.show();
+
+    document.getElementById("continuarBtn").onclick = function () {
+        window.location.href = "/partida/jugarPartida?categoria=" + encodeURIComponent(categoria);
+    };
 }
 
 

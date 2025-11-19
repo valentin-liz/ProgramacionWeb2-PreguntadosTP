@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado</title>
+    <link rel="stylesheet" href="../public/styles/preguntaStyle.css">
+</head>
+
+<body>
+
+<div class="resultado-container">
+
+    {{#esCorrecta}}
+        <h1 class="resultado-correcto">¡Respuesta correcta! 🎉</h1>
+    {{/esCorrecta}}
+
+    {{^esCorrecta}}
+        <h1 class="resultado-incorrecto">Respuesta incorrecta 😢</h1>
+    {{/esCorrecta}}
+
+    <a href="/partida/iniciarPartida" class="volver-btn">Volver a girar la ruleta</a>
+
+</div>
+
+</body>
+</html>
+
