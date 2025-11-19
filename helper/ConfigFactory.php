@@ -53,8 +53,6 @@ class ConfigFactory
 
         $this->objetos["PerfilController"] = new PerfilController(new PerfilModel($this->conexion->getConexion()), $this->renderer);
 
-
-
     }
 
     public function get($objectName)

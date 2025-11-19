@@ -21,4 +21,36 @@ class HomeModel
         }
     }
 
+    public function getTodasLasPreguntas() {
+
+        $query = "SELECT 
+    p.id AS pregunta_id,
+    p.categoria_id,
+    c.nombre AS categoria,
+    p.pregunta,
+    p.opcion_a,
+    p.opcion_b,
+    p.opcion_c,
+    p.opcion_d,
+    p.correcta,
+    p.veces_vista,
+    p.veces_acertada,
+    CASE 
+        WHEN p.veces_vista > 0 THEN p.veces_acertada / p.veces_vista
+        ELSE 0
+    END AS ratio,
+    CASE
+        WHEN p.veces_vista = 0 THEN 'Media'
+        WHEN (p.veces_acertada / p.veces_vista) >= 0.70 THEN 'Fácil'
+        WHEN (p.veces_acertada / p.veces_vista) >= 0.40 THEN 'Media'
+        ELSE 'Difícil'
+    END AS dificultad
+FROM preguntas p
+JOIN categoria c ON p.categoria_id = c.id
+ORDER BY p.id;
+";
+        $resultado = $this->conexion->query($query);
+        return $resultado->fetch_all(MYSQLI_ASSOC);
+    }
+
 }

@@ -16,18 +16,52 @@ class HomeController{
         AuthHelper::checkLogin();
     }
 
-    public function obtenerUsuarioLogueado(){
-        return $_SESSION['usuario'];
+    public function autenticarQueUsuarioSeaJugador(){
+        AuthHelper::verificarJugador();
+    }
+
+    public function autenticarQueUsuarioSeaEditor(){
+        AuthHelper::verificarEditor();
+    }
+
+    public function obtenerRolUsuarioLogueado(){
+        return $_SESSION['rol'];
     }
 
     public function mostrarHome(){
+
         $this->autenticarUsuarioLogueado();
-        $data = [
-            "usuario" => $_SESSION["usuario"],
-            "logueado" => true,
-            "puntos" => $this->model->getPuntosUsuario($_SESSION["usuario"]),
-        ];
-        $this->renderer->render("home", $data);
+
+        switch ($this->obtenerRolUsuarioLogueado()) {
+
+            case 'jugador':
+
+                $this->autenticarQueUsuarioSeaJugador();
+
+                $data = [
+                    "usuario" => $_SESSION["usuario"],
+                    "logueado" => true,
+                    "puntos" => $this->model->getPuntosUsuario($_SESSION["usuario"]),
+                ];
+
+                $this->renderer->render("home", $data);
+                break;
+
+            case 'editor':
+
+                $this->autenticarQueUsuarioSeaEditor();
+
+                $preguntas = $this->model->getTodasLasPreguntas();
+
+                $data = [
+                    "usuario" => $_SESSION["usuario"],
+                    "logueado" => true,
+                    "preguntas" => $preguntas
+                ];
+
+                $this->renderer->render("homeEditor", $data);
+                break;
+        }
     }
 
 }
