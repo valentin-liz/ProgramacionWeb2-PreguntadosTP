@@ -64,5 +64,21 @@ class HomeController{
         }
     }
 
+    public function borrarPregunta()
+    {
+        $id = $_POST["pregunta_id"];
+
+        $ok = $this->model->borrarPregunta($id);
+
+        if ($ok) {
+            header("Location: /home/mostrarHome");
+        } else {
+            header("Location: /home/mostrarHome");
+        }
+
+        exit();
+    }
+
+
 }
 ?>

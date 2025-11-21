@@ -53,4 +53,13 @@ ORDER BY p.id;
         return $resultado->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function borrarPregunta($id)
+    {
+        $sql = "DELETE FROM preguntas WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
+
+
 }
