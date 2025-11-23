@@ -60,15 +60,13 @@
                 <td>{{ratio}}</td>
                 <td>{{dificultad}}</td>
                 <td>
-                    <button type="button" class="btn btn-warning fw-semibold text-light mb-1">Modificar</button>
+                    <a href="/modificarPregunta/mostrarModificarPregunta?id={{pregunta_id}}"  class="btn btn-warning fw-semibold text-light mb-1">Modificar</a>
                     <button class="btn btn-danger fw-semibold mb-1 btn-borrar"
                             data-id="{{pregunta_id}}"
                             data-bs-toggle="modal"
                             data-bs-target="#modalBorrar">
                         Borrar
                     </button>
-
-                    <!--                    <button type="button" class="btn btn-danger fw-semibold mb-1">Borrar</button>-->
                 </td>
             </tr>
         {{/preguntas}}
