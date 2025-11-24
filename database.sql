@@ -284,17 +284,17 @@ ALTER TABLE usuarios
 
 CREATE TABLE preguntas
 (
-    id        INT AUTO_INCREMENT PRIMARY KEY,
-    categoria_id INT(11) NOT NULL,
-    pregunta  TEXT         NOT NULL,
-    opcion_a  VARCHAR(255) NOT NULL,
-    opcion_b  VARCHAR(255) NOT NULL,
-    opcion_c  VARCHAR(255) NOT NULL,
-    opcion_d  VARCHAR(255) NOT NULL,
-    correcta  CHAR(1)      NOT NULL,
-    veces_vista INT(50) DEFAULT 0 NOT NULL,
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    categoria_id   INT(11) NOT NULL,
+    pregunta       TEXT         NOT NULL,
+    opcion_a       VARCHAR(255) NOT NULL,
+    opcion_b       VARCHAR(255) NOT NULL,
+    opcion_c       VARCHAR(255) NOT NULL,
+    opcion_d       VARCHAR(255) NOT NULL,
+    correcta       CHAR(1)      NOT NULL,
+    veces_vista    INT(50) DEFAULT 0 NOT NULL,
     veces_acertada INT(50) DEFAULT 0 NOT NULL,
-    CONSTRAINT fk_preguntas_categoria FOREIGN KEY (categoria_id) REFERENCES categoria(id)
+    CONSTRAINT fk_preguntas_categoria FOREIGN KEY (categoria_id) REFERENCES categoria (id)
 );
 
 -- Preguntas Geografia
@@ -399,4 +399,34 @@ VALUES ('2', '¿Cuántos jugadores hay en un equipo de fútbol?', '9', '10', '11
        ('2', '¿Qué boxeador decía “soy el más grande”?', 'Ali', 'Tyson', 'Frazier', 'Pacquiao', 'A'),
        ('2', '¿Qué deporte combina correr, nadar y pedalear?', 'CrossFit', 'Triatlón', 'Pentatlón', 'Ironman',
         'B');
+
+-- --------------------------------------------------------
+
+--
+-- Agregado de tabla `reportes`
+--
+
+CREATE TABLE reportes
+(
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    pregunta_id INT  NOT NULL,
+    mensaje     TEXT NOT NULL,
+    FOREIGN KEY (pregunta_id) REFERENCES preguntas (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+
+-- --------------------------------------------------------
+
+--
+-- Volcado de datos de prueba a la tabla `reportes`
+--
+
+INSERT INTO reportes (pregunta_id, mensaje)
+VALUES (1, 'La opción correcta parece estar mal, revisen esta pregunta.'),
+       (2, 'Hay un error de ortografía en el enunciado.'),
+       (3, 'La pregunta es confusa, no se entiende bien qué se está preguntando.');
+
+
 
