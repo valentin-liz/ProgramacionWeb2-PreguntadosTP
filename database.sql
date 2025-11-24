@@ -271,7 +271,38 @@ VALUES
 ALTER TABLE usuarios
     ADD COLUMN partidas_jugadas INT DEFAULT 0;
 
+--
+-- Creo partidas_usuario para guardar los datos de las partidas por usuarios y verlo en mi perfil 
+--
 
+CREATE TABLE partidas_usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(100) NOT NULL,
+    pregunta_id INT NOT NULL,
+    respondida_correcta BOOLEAN NOT NULL,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Inserto datos para test en mi perfil
+
+INSERT INTO partidas_usuario (usuario, pregunta_id, respondida_correcta) VALUES
+('sebas', 1, 1),
+('sebas', 2, 1),
+('sebas', 3, 0),
+('sebas', 4, 1),
+('sebas', 5, 0),
+('sebas', 6, 1),
+('sebas', 7, 0),
+('sebas', 8, 1),
+('tati', 1, 0),
+('tati', 2, 1),
+('nahuel', 3, 0);
+
+-- Sumo puntos por lo mismo
+
+UPDATE usuarios SET puntos = 50 WHERE usuario = 'sebas';
+UPDATE usuarios SET puntos = 10 WHERE usuario = 'tati';
+UPDATE usuarios SET puntos = 0 WHERE usuario = 'nahuel';
 
 
 

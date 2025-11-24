@@ -18,11 +18,19 @@ class PerfilController
         AuthHelper::checkLogin();
 
         $usuario = $_SESSION['usuario'];
+
         $datos = $this->model->obtenerUsuario($usuario);
+        $stats = $this->model->obtenerStats($usuario);
+
+        // Marcar sexo
+        $datos["is_masculino"] = ($datos["sexo"] === "Masculino");
+        $datos["is_femenino"]  = ($datos["sexo"] === "Femenino");
+        $datos["is_otro"]      = ($datos["sexo"] === "Prefiero no cargarlo");
 
         $this->renderer->render("perfil", [
-            "logueado" => true,
-            "usuario" => $datos
+            "usuario" => $datos,
+            "stats" => $stats,
+            "logueado" => true
         ]);
     }
 
