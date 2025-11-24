@@ -12,6 +12,7 @@ include_once("controller/PerfilController.php");
 include_once("controller/AgregarPreguntaController.php");
 include_once("controller/ModificarPreguntaController.php");
 include_once("controller/ReportesController.php");
+include_once("controller/DetallesDeReporteController.php");
 
 include_once("model/LoginModel.php");
 include_once("model/RegistrarModel.php");
@@ -22,6 +23,7 @@ include_once("model/PerfilModel.php");
 include_once("model/AgregarPreguntaModel.php");
 include_once("model/ModificarPreguntaModel.php");
 include_once("model/ReportesModel.php");
+include_once("model/DetallesDeReporteModel.php");
 
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -68,6 +70,8 @@ class ConfigFactory
         $this->objetos["ModificarPreguntaController"] = new ModificarPreguntaController(new ModificarPreguntaModel($this->conexion->getConexion()), $this->renderer);
 
         $this->objetos["ReportesController"] = new ReportesController(new ReportesModel($this->conexion->getConexion()), $this->renderer);
+
+        $this->objetos["DetallesDeReporteController"] = new DetallesDeReporteController(new DetallesDeReporteModel($this->conexion->getConexion()), $this->renderer);
 
     }
 
