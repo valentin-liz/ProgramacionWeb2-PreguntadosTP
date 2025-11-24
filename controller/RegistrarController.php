@@ -29,6 +29,13 @@ class RegistrarController
                 return;
             }
 
+            if (!$this->model->emailPareceValido($email)) {
+                $this->renderer->render("registrar", [
+                    "errorEmailFalso" => "❌ El email no es válido (validación falsa)."
+                ]);
+                return;
+            }            
+
             if ($this->model->existeUsuario($email, $usuario)) {
 //                $this->msg = "<p style='color:red;'>❌ El email o el usuario ya existen.</p>";
                 $this->renderer->render("registrar", ["errorUsuarioYaExiste" => "❌ El email o el usuario ya existen."]);
