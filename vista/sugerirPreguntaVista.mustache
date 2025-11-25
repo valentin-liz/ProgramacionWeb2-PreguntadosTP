@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../public/styles/sugerirPreguntaStyle.css">
+</head>
+<body>
+
+<a href="/home/mostrarHome" class="btn btn-outline-secondary fw-semibold ms-5 mt-5">Cancelar</a>
+
+<h1 class="text-center fw-bold mb-4">Sugerir pregunta</h1>
+
+{{#exito}}
+    <div class="alert alert-success" role="alert">{{exito}}</div>
+{{/exito}}
+
+{{#error}}
+    <div class="alert alert-danger" role="alert">{{error}}</div>
+{{/error}}
+
+<div class="sugerirPregutnaFormContainer container-fluid p-5 border border-light-subtle rounded">
+
+    <form method="POST" action="/sugerirPregunta/guardarSugerenciaDePregunta" >
+
+        <div class="mb-3">
+            <label for="pregunta" class="form-label">Pregunta</label>
+            <textarea name="pregunta" class="form-control" placeholder="Escriba la pregunta..." id="pregunta" required style="height: 100px"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="categoria_id" class="form-label">Categoria</label>
+            <select name="categoria_id" class="form-select" aria-label="Default select example" required>
+                <option value="">Seleccionar categoría...</option>
+
+                {{#categorias}}
+                    <option value="{{id}}">{{nombre}}</option>
+                {{/categorias}}
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+            <label for="opcionA" class="form-label">Opcion A</label>
+            <input type="text" name="opcion_a" class="form-control" id="opcionA" aria-describedby="emailHelp" placeholder="Opcion A" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="opcionB" class="form-label">Opcion B</label>
+            <input type="text" name="opcion_b" class="form-control" id="opcionB" aria-describedby="emailHelp" placeholder="Opcion B" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="opcionC" class="form-label">Opcion C</label>
+            <input type="text" name="opcion_c" class="form-control" id="opcionC" aria-describedby="emailHelp" placeholder="Opcion C" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="opcionD" class="form-label">Opcion D</label>
+            <input type="text" name="opcion_d" class="form-control" id="opcionD" aria-describedby="emailHelp" placeholder="Opcion D" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="" class="form-label">Opcion correcta</label>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="opcionCorrecta" value="A" id="opcionCorrectaA" checked>
+                <label class="form-check-label" for="opcionCorrectaA">Opcion A</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="opcionCorrecta" value="B" id="opcionCorrectaB">
+                <label class="form-check-label" for="opcionCorrectaB">Opcion B</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="opcionCorrecta" value="C" id="opcionCorrectaC">
+                <label class="form-check-label" for="opcionCorrectaC">Opcion C</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="opcionCorrecta" value="D" id="opcionCorrectaD">
+                <label class="form-check-label" for="opcionCorrectaD">Opcion D</label>
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">Agregar</button>
+
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
