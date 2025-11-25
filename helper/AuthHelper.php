@@ -15,4 +15,20 @@ class AuthHelper
         }
     }
 
+    public static function verificarJugador() {
+
+        if ($_SESSION['rol'] !== 'jugador') {
+            header("Location: /login/login");
+            exit;
+        }
+    }
+
+    public static function verificarEditor() {
+
+        if ($_SESSION['rol'] !== "editor") {
+            header("Location: /login/login");
+            exit;
+        }
+    }
+
 }

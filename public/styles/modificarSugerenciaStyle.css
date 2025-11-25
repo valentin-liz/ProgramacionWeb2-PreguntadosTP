@@ -1,0 +1,28 @@
+.modificarSugerenciaFormContainer {
+    width: 30vw !important;
+}
+
+
+@media (max-width: 1400px) {
+    .modificarSugerenciaFormContainer {
+        width: 30vw !important;
+    }
+}
+
+@media (max-width: 1100px) {
+    .modificarSugerenciaFormContainer {
+        width: 40vw !important;
+    }
+}
+
+@media (max-width: 650px) {
+    .modificarSugerenciaFormContainer {
+        width: 75vw !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .modificarSugerenciaFormContainer {
+        width: 100vw !important;
+    }
+}
