@@ -47,6 +47,21 @@ class SugerenciasController
         exit();
     }
 
+    public function borrarSugerencia()
+    {
+        $id = $_POST["sugerencia_id"];
+
+        $ok = $this->model->borrarSugerencia($id);
+
+        if ($ok) {
+            header("Location: /sugerencias/mostrarSugerencias");
+        } else {
+            header("Location: /sugerencias/mostrarSugerencias");
+        }
+
+        exit();
+    }
+
 
 
 

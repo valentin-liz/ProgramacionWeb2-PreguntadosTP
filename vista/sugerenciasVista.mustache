@@ -101,17 +101,17 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Confirmar borrado</h5>
+                <h5 class="modal-title">Confirmar rechazado</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
-                ¿Seguro que querés borrar esta pregunta? Esta acción no se puede deshacer.
+                ¿Seguro que querés rechazar esta sugerencia? Esta acción no se puede deshacer.
             </div>
 
             <div class="modal-footer">
-                <form id="formBorrar" method="POST" action="/home/borrarPregunta">
-                    <input type="hidden" name="pregunta_id" id="inputIdBorrar">
+                <form id="formBorrar" method="POST" action="/sugerencias/borrarSugerencia">
+                    <input type="hidden" name="sugerencia_id" id="inputIdBorrar">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-danger">Borrar</button>
                 </form>
