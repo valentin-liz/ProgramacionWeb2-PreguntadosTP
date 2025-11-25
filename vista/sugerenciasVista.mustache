@@ -10,21 +10,19 @@
 
 <ul class="nav nav-pills justify-content-center mt-5 mb-5">
     <li class="nav-item">
-        <a class="nav-link bg-dark fw-semibold active" aria-current="page" href="/home/mostrarHome">Preguntas</a>
+        <a class="nav-link text-dark fw-semibold" href="/home/mostrarHome">Preguntas</a>
     </li>
     <li class="nav-item">
         <a class="nav-link text-dark fw-semibold" href="/reportes/mostrarReportes">Reportes</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark fw-semibold" href="/sugerencias/mostrarSugerencias">Sugerencias</a>
+        <a class="nav-link bg-dark fw-semibold active" aria-current="page" href="/sugerencias/mostrarSugerencias">Sugerencias</a>
     </li>
 </ul>
 
-<h1 class="text-center fw-bold mb-4">Preguntas</h1>
+<h1 class="text-center fw-bold mb-4">Sugerencias</h1>
 
 <div class="container-fluid table-responsive">
-
-    <a href="/AgregarPregunta/mostrarAgregarPregunta" class="btn btn-success mb-2">Agregar</a>
 
     <table class="table table-bordered align-middle">
         <thead class="table-dark">
@@ -37,42 +35,64 @@
             <th scope="col">Opcion C</th>
             <th scope="col">Opcion D</th>
             <th scope="col">Correcta</th>
-            <th scope="col">Veces vista</th>
-            <th scope="col">Veces acertada</th>
-            <th scope="col">Ratio</th>
-            <th scope="col">Dificultad</th>
             <th scope="col">Accion</th>
         </tr>
         </thead>
         <tbody>
-        {{#preguntas}}
+        {{#sugerencias}}
             <tr>
-                <th scope="row">{{pregunta_id}}</th>
+                <th scope="row">{{id}}</th>
                 <td>{{pregunta}}</td>
-                <td>{{categoria}}</td>
+                <td>{{categoria_nombre}}</td>
                 <td>{{opcion_a}}</td>
                 <td>{{opcion_b}}</td>
                 <td>{{opcion_c}}</td>
                 <td>{{opcion_d}}</td>
                 <td>{{correcta}}</td>
-                <td>{{veces_vista}}</td>
-                <td>{{veces_acertada}}</td>
-                <td>{{ratio}}</td>
-                <td>{{dificultad}}</td>
                 <td>
-                    <a href="/modificarPregunta/mostrarModificarPregunta?id={{pregunta_id}}"  class="btn btn-warning fw-semibold text-light mb-1">Modificar</a>
+                    <button type="button" class="btn btn-success fw-semibold mb-1 btn-agregar"
+                            data-id="{{id}}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalAgregarSugerencia">
+                        Agregar
+                    </button>
+                    <a href="/modificarSugerencia/mostrarModificarSugerencia?id={{id}}"  class="btn btn-warning fw-semibold text-light mb-1">Modificar</a>
                     <button class="btn btn-danger fw-semibold mb-1 btn-borrar"
-                            data-id="{{pregunta_id}}"
+                            data-id="{{id}}"
                             data-bs-toggle="modal"
                             data-bs-target="#modalBorrar">
-                        Borrar
+                        Rechazar
                     </button>
                 </td>
             </tr>
-        {{/preguntas}}
+        {{/sugerencias}}
         </tbody>
     </table>
 
+</div>
+
+<!-- Modal agregar sugerencia -->
+<div class="modal fade" id="modalAgregarSugerencia" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Agregar sugerencia</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                ¿Seguro que querés agregar esta sugerencia como una nueva pregunta?
+            </div>
+
+            <div class="modal-footer">
+                <form method="POST" action="/sugerencias/agregarSugerencia">
+                    <input type="hidden" name="sugerencia_id" id="inputIdAgregar">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal confirmar borrar -->
@@ -109,8 +129,14 @@
         });
     });
 
-</script>
+    // Pasar el ID al hidden input del modal
+    document.querySelectorAll(".btn-agregar").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.getElementById("inputIdAgregar").value = btn.dataset.id;
+        });
+    });
 
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>

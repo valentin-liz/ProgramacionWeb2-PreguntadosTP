@@ -429,4 +429,37 @@ VALUES (1, 'La opción correcta parece estar mal, revisen esta pregunta.'),
        (3, 'La pregunta es confusa, no se entiende bien qué se está preguntando.');
 
 
+-- --------------------------------------------------------
+
+--
+-- Agregado de tabla `sugerencias`
+--
+
+CREATE TABLE sugerencias
+(
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    pregunta     VARCHAR(255) NOT NULL,
+    categoria_id INT          NOT NULL,
+    opcion_a     VARCHAR(255) NOT NULL,
+    opcion_b     VARCHAR(255) NOT NULL,
+    opcion_c     VARCHAR(255) NOT NULL,
+    opcion_d     VARCHAR(255) NOT NULL,
+    correcta     CHAR(1)      NOT NULL,
+    FOREIGN KEY (categoria_id) REFERENCES categoria (id)
+);
+
+
+-- --------------------------------------------------------
+
+--
+-- Volcado de datos de prueba a la tabla `sugerencias`
+--
+
+INSERT INTO sugerencias (pregunta, categoria_id, opcion_a, opcion_b, opcion_c, opcion_d, correcta)
+VALUES
+    ('¿Primera pregunta de sugerencia?', 1, 'Sugerencia a', 'Sugerencia b', 'Sugerencia c', 'Sugerencia d', 'B'),
+    ('¿Segunda pregunta de sugerencia?', 2, 'Sugerencia a', 'Sugerencia b', 'Sugerencia c', 'Sugerencia d', 'A'),
+    ('¿Tercera pregunta de sugerencia?', 3, 'Sugerencia a', 'Sugerencia b', 'Sugerencia c', 'Sugerencia d', 'B');
+
+
 
