@@ -29,6 +29,7 @@ class RankingModel
                 ELSE 5
             END AS nivel
         FROM usuarios
+        WHERE rol = 'jugador'
         ORDER BY ratio DESC;
         ";
 
