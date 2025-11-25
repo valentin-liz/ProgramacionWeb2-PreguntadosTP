@@ -44,22 +44,22 @@ class PartidaController
         ]);
     }
 
-    public function validarRespuesta()
-    {
-        // DEVOLVER JSON, NO RENDERIZAR
-        header("Content-Type: application/json");
-
-        $id = $_POST["id_pregunta"];
-        $respuesta = $_POST["respuesta"];
-
-        $correcta = $this->model->getRespuestaCorrecta($id);
-
-        $esCorrecta = ($respuesta === $correcta["correcta"]);
-
-        echo json_encode([
-            "correcta" => $esCorrecta
-        ]);
-    }
+//    public function validarRespuesta()
+//    {
+//        // DEVOLVER JSON, NO RENDERIZAR
+//        header("Content-Type: application/json");
+//
+//        $id = $_POST["id_pregunta"];
+//        $respuesta = $_POST["respuesta"];
+//
+//        $correcta = $this->model->getRespuestaCorrecta($id);
+//
+//        $esCorrecta = ($respuesta === $correcta["correcta"]);
+//
+//        echo json_encode([
+//            "correcta" => $esCorrecta
+//        ]);
+//    }
 
     public function validarRespuesta()
 {
