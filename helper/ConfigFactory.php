@@ -2,16 +2,34 @@
 include_once("helper/MyConexion.php");
 include_once("helper/IncludeFileRenderer.php");
 include_once("helper/NewRouter.php");
+
 include_once("controller/LoginController.php");
 include_once("controller/RegistrarController.php");
 include_once("controller/HomeController.php");
 include_once("controller/PartidaController.php");
 include_once("controller/RankingController.php");
+include_once("controller/PerfilController.php");
+include_once("controller/AgregarPreguntaController.php");
+include_once("controller/ModificarPreguntaController.php");
+include_once("controller/ReportesController.php");
+include_once("controller/DetallesDeReporteController.php");
+include_once("controller/SugerenciasController.php");
+include_once("controller/ModificarSugerenciaController.php");
+
 include_once("model/LoginModel.php");
 include_once("model/RegistrarModel.php");
 include_once("model/HomeModel.php");
 include_once("model/PartidaModel.php");
 include_once("model/RankingModel.php");
+include_once("model/PerfilModel.php");
+include_once("model/AgregarPreguntaModel.php");
+include_once("model/ModificarPreguntaModel.php");
+include_once("model/ReportesModel.php");
+include_once("model/DetallesDeReporteModel.php");
+include_once("model/SugerenciasModel.php");
+include_once("model/ModificarSugerenciaModel.php");
+
+
 require_once __DIR__ . '/../vendor/autoload.php';
 include_once ("helper/MustacheRenderer.php");
 
@@ -49,7 +67,19 @@ class ConfigFactory
 
         $this->objetos["RankingController"] = new RankingController(new RankingModel($this->conexion->getConexion()), $this->renderer);
 
+        $this->objetos["PerfilController"] = new PerfilController(new PerfilModel($this->conexion->getConexion()), $this->renderer);
 
+        $this->objetos["AgregarPreguntaController"] = new AgregarPreguntaController(new AgregarPreguntaModel($this->conexion->getConexion()), $this->renderer);
+
+        $this->objetos["ModificarPreguntaController"] = new ModificarPreguntaController(new ModificarPreguntaModel($this->conexion->getConexion()), $this->renderer);
+
+        $this->objetos["ReportesController"] = new ReportesController(new ReportesModel($this->conexion->getConexion()), $this->renderer);
+
+        $this->objetos["DetallesDeReporteController"] = new DetallesDeReporteController(new DetallesDeReporteModel($this->conexion->getConexion()), $this->renderer);
+
+        $this->objetos["SugerenciasController"] = new SugerenciasController(new SugerenciasModel($this->conexion->getConexion()), $this->renderer);
+
+        $this->objetos["ModificarSugerenciaController"] = new ModificarSugerenciaController(new ModificarSugerenciaModel($this->conexion->getConexion()), $this->renderer);
 
     }
 

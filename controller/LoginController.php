@@ -32,7 +32,10 @@ class LoginController
 
             if ($resultado) {
                 $_SESSION["usuario"] = $resultado["usuario"];
-                $this->redirectToIndex();
+                $_SESSION["rol"] = $resultado["rol"];
+
+                $this->redirigirAlInicio();
+
             } else {
                 $this->renderer->render("login", ["error" => "Usuario o clave incorrecta"]);
             }
@@ -46,14 +49,16 @@ class LoginController
     public function logout()
     {
         session_destroy();
-        $this->redirectToIndex();
+        $this->redirigirAlInicio();
     }
 
-    public function redirectToIndex()
+    public function redirigirAlInicio()
     {
         header("Location: /home/mostrarHome");
         exit;
     }
 
+
 }
+
 

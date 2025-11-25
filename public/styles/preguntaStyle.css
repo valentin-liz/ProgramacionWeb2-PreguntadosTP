@@ -1,0 +1,113 @@
+body {
+    background: #f6f6f6;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* CONTENEDOR GENERAL */
+.pregunta-container,
+.resultado-container {
+    max-width: 700px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+/* TITULO DE CATEGORIA */
+.categoria-titulo {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+/* CAJA DE PREGUNTA */
+.pregunta-box {
+    background: #ececec;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.pregunta-text {
+    font-size: 24px;
+    color: #222;
+}
+
+/* BOTONES DE OPCIONES */
+.opciones-container {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.opcion-btn {
+    padding: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    background: #0077cc;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.opcion-btn:hover {
+    background: #005fa3;
+    transform: scale(1.03);
+}
+
+/* RESULTADO */
+.resultado-correcto {
+    color: #28a745;
+    font-size: 36px;
+}
+
+.resultado-incorrecto {
+    color: #dc3545;
+    font-size: 36px;
+}
+
+/* BOTÓN VOLVER */
+.volver-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 15px 25px;
+    background: #222;
+    color: white;
+    font-size: 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.volver-btn:hover {
+    background: #000;
+    transform: scale(1.05);
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .pregunta-container,
+    .resultado-container {
+        margin: 20px;
+        padding: 25px;
+    }
+
+    .categoria-titulo {
+        font-size: 26px;
+    }
+
+    .pregunta-text {
+        font-size: 20px;
+    }
+
+    .opcion-btn {
+        font-size: 18px;
+    }
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil</title>
+
+    <link rel="stylesheet" href="../public/styles/perfilStyle.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Leaflet MAP -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- QR Generator -->
+    <script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
+
+</head>
+<body>
+
+<a href="/home/mostrarHome" class="btn btn-outline-secondary fw-semibold ms-5 mt-5">Volver</a>
+
+<div class="perfil-container">
+
+    <h2>Mi Perfil</h2>
+
+    <!-- FOTO PERFIL -->
+    {{#usuario.foto_perfil}}
+        <img src="/{{usuario.foto_perfil}}" alt="Foto de perfil" class="foto-perfil">
+    {{/usuario.foto_perfil}}
+
+    {{^usuario.foto_perfil}}
+        <img src="/public/imagenes/perfilesImgs/default-profile.png" alt="Foto de perfil" class="foto-perfil">
+    {{/usuario.foto_perfil}}
+
+    <!-- ESTADÍSTICAS DEL JUGADOR -->
+    <div class="stats-box">
+        <h4>📊 Estadísticas del Jugador</h4>
+        <p><strong>Puntos totales:</strong> {{stats.puntos}}</p>
+        <p><strong>Partidas jugadas:</strong> {{stats.partidas}}</p>
+        <p><strong>Ratio (aciertos/vistos):</strong> {{stats.ratio}}</p>
+        <p><strong>Nivel:</strong> {{stats.nivel}}</p>
+    </div>
+
+    <form action="/perfil/actualizarPerfil" method="POST" enctype="multipart/form-data">
+
+        <label>Nombre:</label>
+        <input type="text" name="nombre" value="{{usuario.nombre}}">
+
+        <label>Apellido:</label>
+        <input type="text" name="apellido" value="{{usuario.apellido}}">
+
+        <label>Año de nacimiento:</label>
+        <input type="number" name="anio_nacimiento" value="{{usuario.anio_nacimiento}}">
+
+        <label>Sexo:</label>
+        <select name="sexo">
+            <option value="Masculino" {{#is_masculino}}selected{{/is_masculino}}>Masculino</option>
+            <option value="Femenino" {{#is_femenino}}selected{{/is_femenino}}>Femenino</option>
+            <option value="Otro" {{#is_otro}}selected{{/is_otro}}>Otro</option>
+        </select>
+
+        <!-- MAPA PAIS / CIUDAD -->
+        <label>País / Ciudad:</label>
+        <input type="text" id="pais_ciudad" name="pais_ciudad" value="{{usuario.pais_ciudad}}">
+
+        <div id="map" style="height: 260px; border-radius: 10px; margin-bottom: 15px;"></div>
+
+        <label>Email:</label>
+        <input type="email" name="email" value="{{usuario.email}}">
+
+        <label>Foto de perfil:</label>
+        <input type="file" name="foto_perfil" accept="image/*">
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">Guardar cambios</button>
+    </form>
+
+    <!-- QR DEL JUGADOR -->
+    <h4 class="mt-4">🔗 Mi QR de Jugador</h4>
+    <canvas id="qrCanvas"></canvas>
+
+    <!-- BOTONES -->
+    <div class="mt-4 d-flex flex-column gap-2">
+        <a href="/auth/logout" class="btn btn-danger w-100">Cerrar sesión</a>
+    </div>
+
+</div>
+
+<script>
+/* =============================
+   MAPA CON LEAFLET
+============================= */
+let map = L.map('map').setView([-34.6037, -58.3816], 4); // Default: Argentina
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+// Click en mapa → setea país/ciudad automáticamente
+map.on("click", async function(e) {
+    let lat = e.latlng.lat;
+    let lng = e.latlng.lng;
+
+    try {
+        let res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+        let data = await res.json();
+        document.getElementById("pais_ciudad").value = 
+            (data.address.city ?? data.address.town ?? data.address.village ?? "") +
+            ", " + 
+            (data.address.country ?? "");
+    } catch (err) {
+        alert("No se pudo obtener el nombre de la ciudad.");
+    }
+});
+
+/* =============================
+   QR DEL JUGADOR
+============================= */
+let qr = new QRious({
+    element: document.getElementById("qrCanvas"),
+    value: "Usuario: {{usuario.usuario}}",
+    size: 200
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

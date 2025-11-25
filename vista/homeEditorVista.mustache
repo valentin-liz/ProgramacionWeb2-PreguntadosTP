@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+
+<ul class="nav nav-pills justify-content-center mt-5 mb-5">
+    <li class="nav-item">
+        <a class="nav-link bg-dark fw-semibold active" aria-current="page" href="/home/mostrarHome">Preguntas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark fw-semibold" href="/reportes/mostrarReportes">Reportes</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark fw-semibold" href="/sugerencias/mostrarSugerencias">Sugerencias</a>
+    </li>
+</ul>
+
+<h1 class="text-center fw-bold mb-4">Preguntas</h1>
+
+<div class="container-fluid table-responsive">
+
+    <a href="/AgregarPregunta/mostrarAgregarPregunta" class="btn btn-success mb-2">Agregar</a>
+
+    <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Pregunta</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Opcion A</th>
+            <th scope="col">Opcion B</th>
+            <th scope="col">Opcion C</th>
+            <th scope="col">Opcion D</th>
+            <th scope="col">Correcta</th>
+            <th scope="col">Veces vista</th>
+            <th scope="col">Veces acertada</th>
+            <th scope="col">Ratio</th>
+            <th scope="col">Dificultad</th>
+            <th scope="col">Accion</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#preguntas}}
+            <tr>
+                <th scope="row">{{pregunta_id}}</th>
+                <td>{{pregunta}}</td>
+                <td>{{categoria}}</td>
+                <td>{{opcion_a}}</td>
+                <td>{{opcion_b}}</td>
+                <td>{{opcion_c}}</td>
+                <td>{{opcion_d}}</td>
+                <td>{{correcta}}</td>
+                <td>{{veces_vista}}</td>
+                <td>{{veces_acertada}}</td>
+                <td>{{ratio}}</td>
+                <td>{{dificultad}}</td>
+                <td>
+                    <a href="/modificarPregunta/mostrarModificarPregunta?id={{pregunta_id}}"  class="btn btn-warning fw-semibold text-light mb-1">Modificar</a>
+                    <button class="btn btn-danger fw-semibold mb-1 btn-borrar"
+                            data-id="{{pregunta_id}}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalBorrar">
+                        Borrar
+                    </button>
+                </td>
+            </tr>
+        {{/preguntas}}
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Modal confirmar borrar -->
+<div class="modal fade" id="modalBorrar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar borrado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                ¿Seguro que querés borrar esta pregunta? Esta acción no se puede deshacer.
+            </div>
+
+            <div class="modal-footer">
+                <form id="formBorrar" method="POST" action="/home/borrarPregunta">
+                    <input type="hidden" name="pregunta_id" id="inputIdBorrar">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Borrar</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll(".btn-borrar").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            document.getElementById("inputIdBorrar").value = id;
+        });
+    });
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

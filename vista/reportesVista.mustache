@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+
+<ul class="nav nav-pills justify-content-center mt-5 mb-5">
+    <li class="nav-item">
+        <a class="nav-link text-dark fw-semibold" href="/home/mostrarHome">Preguntas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link bg-dark fw-semibold active" aria-current="page" href="/reportes/mostrarReportes">Reportes</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark fw-semibold" href="/sugerencias/mostrarSugerencias">Sugerencias</a>
+    </li>
+</ul>
+
+<h1 class="text-center fw-bold mb-4">Reportes</h1>
+
+<div class="container-fluid table-responsive">
+
+    <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Pregunta</th>
+            <th scope="col">Accion</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#reportes}}
+            <tr>
+                <th scope="row">{{id}}</th>
+                <td>{{pregunta}}</td>
+                <td>
+                    <a href="/DetallesDeReporte/mostrarDetallesDeReporte?id={{id}}"  class="btn btn-secondary fw-semibold text-light mb-1">Ver reporte</a>
+                </td>
+            </tr>
+        {{/reportes}}
+        </tbody>
+    </table>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
