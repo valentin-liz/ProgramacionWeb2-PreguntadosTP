@@ -30,6 +30,7 @@ class ModificarPreguntaController
         $pregunta["correctaD"] = ($pregunta["correcta"] === "D");
 
         $this->renderer->render("modificarPregunta", [
+            "logueado" => true,
             "pregunta" => $pregunta,
             "categorias" => $categorias
         ]);
@@ -63,11 +64,13 @@ class ModificarPreguntaController
         if ($ok) {
 
             $this->renderer->render("modificarPregunta", [
+                "logueado" => true,
                 "exito" => "Modificaciones gurdadas exitosamente"
             ]);
         } else {
 
             $this->renderer->render("modificarPregunta", [
+                "logueado" => true,
                 "error" => "No se pudo modificar la pregunta, por favor intenta nuevamente"
             ]);
         }
