@@ -13,6 +13,21 @@ class PartidaController
 
     public function iniciarPartida()
     {
+
+        // 1. Obtener el usuario logueado
+        $usuarioId = $_SESSION["usuario_id"] ?? null;
+
+        if (!$usuarioId) {
+            header("Location: /login/login");
+            exit;
+        }
+
+        // 2. Crear la partida
+        $partidaId = $this->model->crearPartida($usuarioId);
+
+        // 3. Guardar el ID en la sesión
+        $_SESSION["partida_id"] = $partidaId;
+
         $categorias = $this->model->getCategorias();
 
         foreach ($categorias as $i => &$cat) {

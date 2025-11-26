@@ -43,4 +43,18 @@ class PartidaModel
     {
         return $this->conexion;
     }
+
+    public function crearPartida($usuarioId)
+    {
+        $sql = "INSERT INTO partida (usuario_id) VALUES (?)";
+
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+
+        // devolver el ID de la partida recién creada
+        return $this->conexion->insert_id;
+    }
+
+
 }
