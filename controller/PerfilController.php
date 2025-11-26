@@ -78,4 +78,14 @@ class PerfilController
     {
         $this->mostrarPerfil();
     }
+
+    public function logout() {
+        session_start();
+        session_unset();     // Limpia todas las variables $_SESSION
+        session_destroy();   // Destruye la sesión en el servidor
+
+        header("Location: /login/login");
+        exit;
+    }
+
 }

@@ -12,17 +12,17 @@ class HomeController{
         $this->renderer = $renderer;
     }
 
-    public function autenticarUsuarioLogueado(){
-        AuthHelper::checkLogin();
-    }
-
-    public function autenticarQueUsuarioSeaJugador(){
-        AuthHelper::verificarJugador();
-    }
-
-    public function autenticarQueUsuarioSeaEditor(){
-        AuthHelper::verificarEditor();
-    }
+//    public function autenticarUsuarioLogueado(){
+//        AuthHelper::checkLogin();
+//    }
+//
+//    public function autenticarQueUsuarioSeaJugador(){
+//        AuthHelper::verificarJugador();
+//    }
+//
+//    public function autenticarQueUsuarioSeaEditor(){
+//        AuthHelper::verificarEditor();
+//    }
 
     public function obtenerRolUsuarioLogueado(){
         return $_SESSION['rol'];
@@ -30,13 +30,13 @@ class HomeController{
 
     public function mostrarHome(){
 
-        $this->autenticarUsuarioLogueado();
+        //$this->autenticarUsuarioLogueado();
 
         switch ($this->obtenerRolUsuarioLogueado()) {
 
             case 'jugador':
 
-                $this->autenticarQueUsuarioSeaJugador();
+                //$this->autenticarQueUsuarioSeaJugador();
 
                 $data = [
                     "usuario" => $_SESSION["usuario"],
@@ -49,7 +49,7 @@ class HomeController{
 
             case 'editor':
 
-                $this->autenticarQueUsuarioSeaEditor();
+                //$this->autenticarQueUsuarioSeaEditor();
 
                 $preguntas = $this->model->getTodasLasPreguntas();
 
