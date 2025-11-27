@@ -145,5 +145,16 @@ class PartidaModel
         return $res->fetch_assoc();
     }
 
+    public function getEstadoPartida($partidaId)
+    {
+        $sql = "SELECT estado FROM partida WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $partidaId);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        return $res ? $res["estado"] : null;
+    }
+
+
 
 }

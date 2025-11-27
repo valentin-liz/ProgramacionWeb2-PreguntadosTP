@@ -45,6 +45,7 @@ $accessControl = [
         "ruleta" => ["jugador"],
         "salir" => ["jugador"],
         "resumen" => ["jugador"],
+        "marcarAbandono" => ["jugador"],
     ],
 
     "SugerirPregunta" => [

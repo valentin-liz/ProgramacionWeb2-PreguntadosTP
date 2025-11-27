@@ -55,38 +55,50 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-document.querySelectorAll(".opcion-btn").forEach(btn => {
-    btn.addEventListener("click", function(e) {
-        e.preventDefault();
 
-        const respuesta = this.value;
-        const id = document.querySelector("input[name='id_pregunta']").value;
+    window.addEventListener("beforeunload", function (event) {
+        // Si la nueva URL NO inicia con tu dominio → abandono real
+        const nextUrl = document.activeElement?.href;
 
-        fetch("/partida/responder", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `id_pregunta=${id}&respuesta=${respuesta}`
-        })
-        .then(res => res.json())
-        .then(data => {
-            const modal = new bootstrap.Modal(document.getElementById("resultadoModal"));
-            const mensaje = document.getElementById("mensajeResultado");
+        if (!nextUrl || !nextUrl.startsWith(window.location.origin)) {
+            navigator.sendBeacon("/partida/marcarAbandono");
+        }
+    });
 
-            if (data.correcta) {
-                mensaje.innerHTML = "🎉 ¡Respuesta correcta!";
-                mensaje.classList.add("text-success");
-                mensaje.classList.remove("text-danger");
-            } else if (data.partidaFinalizada) {
-                //mensaje.innerHTML = "❌ Respuesta incorrecta";
-                //mensaje.classList.add("text-danger");
-                //mensaje.classList.remove("text-success");
-                window.location.href = "/partida/resumen?partidaId=" + data.partidaId;
-            }
 
-            modal.show();
+
+    document.querySelectorAll(".opcion-btn").forEach(btn => {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const respuesta = this.value;
+            const id = document.querySelector("input[name='id_pregunta']").value;
+
+            fetch("/partida/responder", {
+                method: "POST",
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: `id_pregunta=${id}&respuesta=${respuesta}`
+            })
+                    .then(res => res.json())
+                    .then(data => {
+                        const modal = new bootstrap.Modal(document.getElementById("resultadoModal"));
+                        const mensaje = document.getElementById("mensajeResultado");
+
+                        if (data.correcta) {
+
+                            mensaje.innerHTML = "🎉 ¡Respuesta correcta!";
+                            mensaje.classList.add("text-success");
+                            mensaje.classList.remove("text-danger");
+
+                        } else if (data.partidaFinalizada) {
+
+                            window.location.href = "/partida/resumen?partidaId=" + data.partidaId;
+                        }
+
+                        modal.show();
+                    });
         });
     });
-});
 </script>
 
 </body>

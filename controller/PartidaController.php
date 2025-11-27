@@ -56,6 +56,13 @@ class PartidaController
         $usuarioId = $_SESSION["usuario_id"];
         $categoria = $_GET["categoria"];
 
+        $estado = $this->model->getEstadoPartida($partidaId);
+
+        if ($estado !== 'jugando') {
+            header("Location: /partida/resumen?partida=$partidaId");
+            exit;
+        }
+
         $pregunta = $this->model->getPreguntaPorCategoria($categoria, $usuarioId);
 
         if (!$pregunta) {
@@ -81,6 +88,18 @@ class PartidaController
         $respuesta = $_POST["respuesta"];
         $usuarioId = $_SESSION["usuario_id"];
         $partidaId = $_SESSION["partida_id"];
+
+        $estado = $this->model->getEstadoPartida($partidaId);
+
+        if ($estado !== 'jugando') {
+            echo json_encode([
+                "error" => "Partida finalizada",
+                "partidaFinalizada" => true,
+                "redirect" => "/partida/resumen?partida=$partidaId"
+            ]);
+            return;
+        }
+
 
         // Delegar validación al modelo
         $resultado = $this->model->verificarRespuesta($preguntaId, $respuesta);
@@ -142,7 +161,7 @@ class PartidaController
 
         unset($_SESSION["partida_id"]);
 
-        header("Location: /home/mostrarHome");
+        header("Location: /partida/resumen?partidaId=".$partidaId);
     }
 
 
@@ -154,10 +173,23 @@ class PartidaController
             die("Partida no encontrada");
         }
 
+        // limpiar la partida de la sesión
+        unset($_SESSION["partida_id"]);
+
         $data = $this->model->obtenerResumenPartida($partidaId);
 
         $this->renderer->render("resumenPartida", $data);
     }
+
+    public function marcarAbandono()
+    {
+        if (isset($_SESSION["partida_id"])) {
+
+            $this->model->finalizarPartida($_SESSION["partida_id"]);
+            unset($_SESSION["partida_id"]);
+        }
+    }
+
 
 
 }
