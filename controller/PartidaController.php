@@ -39,19 +39,30 @@ class PartidaController
         ]);
     }
 
-    public function jugarPartida()
+    public function entregarPregunta()
     {
+
+        if (!isset($_SESSION["partida_id"])) {
+            header("Location: /home/mostrarHome");
+            exit;
+        }
+
         if (!isset($_GET["categoria"])) {
             header("Location: /partida/iniciarPartida");
             exit;
         }
 
+        $partidaId = $_SESSION["partida_id"];
+        $usuarioId = $_SESSION["usuario_id"];
         $categoria = $_GET["categoria"];
-        $pregunta = $this->model->getPreguntaPorCategoria($categoria);
+
+        $pregunta = $this->model->getPreguntaPorCategoria($categoria, $usuarioId);
 
         if (!$pregunta) {
             die("No hay preguntas cargadas para la categoría: " . $categoria);
         }
+
+        $this->model->setPreguntaActual($partidaId, $pregunta["id"]);
 
         $this->renderer->render("pregunta", [
             "categoria" => $categoria,
@@ -59,67 +70,94 @@ class PartidaController
         ]);
     }
 
-//    public function validarRespuesta()
-//    {
-//        // DEVOLVER JSON, NO RENDERIZAR
-//        header("Content-Type: application/json");
-//
-//        $id = $_POST["id_pregunta"];
-//        $respuesta = $_POST["respuesta"];
-//
-//        $correcta = $this->model->getRespuestaCorrecta($id);
-//
-//        $esCorrecta = ($respuesta === $correcta["correcta"]);
-//
-//        echo json_encode([
-//            "correcta" => $esCorrecta
-//        ]);
-//    }
+    public function responder()
+    {
+        if (!isset($_POST["id_pregunta"]) || !isset($_POST["respuesta"])) {
+            echo json_encode(["error" => "Datos incompletos"]);
+            return;
+        }
 
-    public function validarRespuesta()
-{
-    session_start();
-    header("Content-Type: application/json");
+        $preguntaId = $_POST["id_pregunta"];
+        $respuesta = $_POST["respuesta"];
+        $usuarioId = $_SESSION["usuario_id"];
+        $partidaId = $_SESSION["partida_id"];
 
-    // Datos recibidos del AJAX
-    $preguntaId = $_POST["id_pregunta"];
-    $respuesta = $_POST["respuesta"];
+        // Delegar validación al modelo
+        $resultado = $this->model->verificarRespuesta($preguntaId, $respuesta);
 
-    // Usuario actual
-    $usuario = $_SESSION["usuario"];
+        // Guardar que el usuario ya vio esta pregunta
+        $this->model->marcarPreguntaRespondida($usuarioId, $preguntaId);
 
-    // Obtener la respuesta correcta
-    $correcta = $this->model->getRespuestaCorrecta($preguntaId);
-    $esCorrecta = ($respuesta === $correcta["correcta"]) ? 1 : 0;
+        // Actualizar puntos si es correcta
+        if ($resultado["correcta"]) {
 
-    // ================================================
-    // ✔ GUARDAR RESPUESTA EN BD
-    // ================================================
-    $conexion = $this->model->getConexion();
+            $this->model->sumarPunto($partidaId, $usuarioId);
 
-    $sql = "INSERT INTO partidas_usuario (usuario, pregunta_id, respondida_correcta)
-            VALUES (?, ?, ?)";
+            echo json_encode([
+                "correcta" => true,
+                "partidaFinalizada" => false
+            ]);
+            return;
+        }
 
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("sii", $usuario, $preguntaId, $esCorrecta);
-    $stmt->execute();
+        $this->model->finalizarPartida($partidaId);
 
-    // ================================================
-    // ✔ SUMAR PUNTOS (opcional)
-    // ================================================
-    if ($esCorrecta) {
-        $sql2 = "UPDATE usuarios SET puntos = puntos + 10 WHERE usuario = ?";
-        $stmt2 = $conexion->prepare($sql2);
-        $stmt2->bind_param("s", $usuario);
-        $stmt2->execute();
+        echo json_encode([
+            "correcta" => false,
+            "partidaFinalizada" => true,
+            "partidaId" => $partidaId
+        ]);
+
+
     }
 
-    // ================================================
-    // ✔ RESPUESTA AL FRONT
-    // ================================================
-    echo json_encode([
-        "correcta" => $esCorrecta
-    ]);
-}
+
+    public function ruleta()
+    {
+        if (!isset($_SESSION["partida_id"])) {
+            header("Location: /login/login");
+            exit;
+        }
+
+        $categorias = $this->model->getCategorias();
+
+        foreach ($categorias as $i => &$cat) {
+            $cat['last'] = ($i === count($categorias) - 1);
+        }
+
+        $this->renderer->render("partidaIniciada", [
+            "categorias" => $categorias
+        ]);
+    }
+
+    public function salir()
+    {
+        if (!isset($_SESSION["partida_id"])) {
+            header("Location: /home/mostrarHome");
+            exit;
+        }
+
+        $partidaId = $_SESSION["partida_id"];
+        $this->model->finalizarPartida($partidaId);
+
+        unset($_SESSION["partida_id"]);
+
+        header("Location: /home/mostrarHome");
+    }
+
+
+    public function resumen()
+    {
+        $partidaId = $_GET["partidaId"] ?? null;
+
+        if (!$partidaId) {
+            die("Partida no encontrada");
+        }
+
+        $data = $this->model->obtenerResumenPartida($partidaId);
+
+        $this->renderer->render("resumenPartida", $data);
+    }
+
 
 }

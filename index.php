@@ -40,8 +40,11 @@ $accessControl = [
 
     "Partida" => [
         "iniciarPartida" => ["jugador"],
-        "jugarPartida" => ["jugador"],
-        "validarRespuesta" => ["jugador"],
+        "entregarPregunta" => ["jugador"],
+        "responder" => ["jugador"],
+        "ruleta" => ["jugador"],
+        "salir" => ["jugador"],
+        "resumen" => ["jugador"],
     ],
 
     "SugerirPregunta" => [
@@ -81,12 +84,12 @@ $accessControl = [
     ],
 ];
 
-// 1. Si el controlador no existe en el ACL ⇒ error 404
+// 1. Si el controlador no existe en el ACL - error 404
 if (!isset($accessControl[$controller])) {
     die("404 - Controlador inexistente ($controller)");
 }
 
-// 2. Si el método no existe en el controlador ⇒ error 404
+// 2. Si el metodo no existe en el controllador - error 404
 if (!isset($accessControl[$controller][$method])) {
     die("404 - Método inexistente ($method)");
 }
@@ -94,16 +97,16 @@ if (!isset($accessControl[$controller][$method])) {
 // 3. Obtener roles permitidos
 $allowedRoles = $accessControl[$controller][$method];
 
-// 4. Si es público → pasa
+// 4. Si es público pasa
 if (!in_array("public", $allowedRoles)) {
 
-    // Si no hay sesión → login
+    // Si no hay sesión lleva a login
     if (!isset($_SESSION["rol"])) {
         header("Location: /");
         exit;
     }
 
-    // Si el rol no coincide → 403
+    // Si el rol no coincide - 403
     if (!in_array($_SESSION["rol"], $allowedRoles)) {
         die("403 - No tenés permiso");
     }

@@ -16,14 +16,14 @@
         <h3 class="pregunta-text">{{pregunta.pregunta}}</h3>
     </div>
 
-    <form class="opciones-container">
+    <form class="opciones-container" method="POST">
 
         <input type="hidden" name="id_pregunta" value="{{pregunta.id}}">
 
-        <button class="opcion-btn" value="A">{{pregunta.opcion_a}}</button>
-        <button class="opcion-btn" value="B">{{pregunta.opcion_b}}</button>
-        <button class="opcion-btn" value="C">{{pregunta.opcion_c}}</button>
-        <button class="opcion-btn" value="D">{{pregunta.opcion_d}}</button>
+        <button type="button" class="opcion-btn" value="A">{{pregunta.opcion_a}}</button>
+        <button type="button" class="opcion-btn" value="B">{{pregunta.opcion_b}}</button>
+        <button type="button" class="opcion-btn" value="C">{{pregunta.opcion_c}}</button>
+        <button type="button" class="opcion-btn" value="D">{{pregunta.opcion_d}}</button>
 
     </form>
 </div>
@@ -44,7 +44,7 @@
             </div>
 
             <div class="modal-footer">
-                <a href="/partida/iniciarPartida" class="btn btn-primary">Volver a girar</a>
+                <a href="/partida/ruleta" class="btn btn-primary">Volver a girar</a>
             </div>
 
         </div>
@@ -62,7 +62,7 @@ document.querySelectorAll(".opcion-btn").forEach(btn => {
         const respuesta = this.value;
         const id = document.querySelector("input[name='id_pregunta']").value;
 
-        fetch("/partida/validarRespuesta", {
+        fetch("/partida/responder", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: `id_pregunta=${id}&respuesta=${respuesta}`
@@ -76,10 +76,11 @@ document.querySelectorAll(".opcion-btn").forEach(btn => {
                 mensaje.innerHTML = "🎉 ¡Respuesta correcta!";
                 mensaje.classList.add("text-success");
                 mensaje.classList.remove("text-danger");
-            } else {
-                mensaje.innerHTML = "❌ Respuesta incorrecta";
-                mensaje.classList.add("text-danger");
-                mensaje.classList.remove("text-success");
+            } else if (data.partidaFinalizada) {
+                //mensaje.innerHTML = "❌ Respuesta incorrecta";
+                //mensaje.classList.add("text-danger");
+                //mensaje.classList.remove("text-success");
+                window.location.href = "/partida/resumen?partidaId=" + data.partidaId;
             }
 
             modal.show();

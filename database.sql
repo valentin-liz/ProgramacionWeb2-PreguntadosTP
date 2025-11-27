@@ -373,17 +373,30 @@ VALUES ('¿Primera pregunta de sugerencia?', 1, 'Sugerencia a', 'Sugerencia b', 
 
 CREATE TABLE partida
 (
-    id               INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id       INT,
-    puntos           INT      DEFAULT 0,
-    estado           ENUM('jugando','finalizada','abandonada') DEFAULT 'jugando',
-    inicio           DATETIME DEFAULT CURRENT_TIMESTAMP,
-    fin              DATETIME NULL,
-    tiempo_total_seg INT NULL, -- tiempo jugado o límite
-    last_activity    DATETIME DEFAULT CURRENT_TIMESTAMP,
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id         INT,
+    puntos             INT      DEFAULT 0,
+    estado             ENUM('jugando','finalizada','abandonada') DEFAULT 'jugando',
+    inicio             DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fin                DATETIME NULL,
+    tiempo_total_seg   INT NULL, -- tiempo jugado o límite
+    last_activity      DATETIME DEFAULT CURRENT_TIMESTAMP,
     pregunta_actual_id INT NULL,
     FOREIGN KEY (usuario_id) REFERENCES usuarios (id),
-    FOREIGN KEY (pregunta_actual_id) REFERENCES preguntas(id)
+    FOREIGN KEY (pregunta_actual_id) REFERENCES preguntas (id)
+);
+
+
+CREATE TABLE preguntas_respondidas
+(
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id  INT NOT NULL,
+    pregunta_id INT NOT NULL,
+    fecha       DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (usuario_id, pregunta_id),
+
+    FOREIGN KEY (usuario_id) REFERENCES usuarios (id),
+    FOREIGN KEY (pregunta_id) REFERENCES preguntas (id)
 );
 
 

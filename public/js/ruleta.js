@@ -48,7 +48,7 @@ function alertResultado(segmento) {
     modal.show();
 
     document.getElementById("continuarBtn").onclick = function () {
-        window.location.href = "/partida/jugarPartida?categoria=" + encodeURIComponent(categoria);
+        window.location.href = "/partida/entregarPregunta?categoria=" + encodeURIComponent(categoria);
     };
 }
 
@@ -65,3 +65,8 @@ window.addEventListener('load', crearRuleta);
 window.addEventListener('resize', () => {
     crearRuleta();
 });
+
+// boton salir de partida
+document.getElementById("salirPartidaBtn").onclick = function() {
+    window.location.href = "/partida/salir";
+};
