@@ -66,7 +66,10 @@ class PartidaController
         $pregunta = $this->model->getPreguntaPorCategoria($categoria, $usuarioId);
 
         if (!$pregunta) {
-            die("No hay preguntas cargadas para la categoría: " . $categoria);
+
+            $this->model->reiniciarPreguntasPartida($usuarioId);
+
+            $pregunta = $this->model->getPreguntaPorCategoria($categoria, $usuarioId);
         }
 
         $this->model->setPreguntaActual($partidaId, $pregunta["id"]);

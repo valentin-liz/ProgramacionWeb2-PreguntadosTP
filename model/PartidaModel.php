@@ -18,19 +18,26 @@ class PartidaModel
 
     public function getPreguntaPorCategoria($categoria, $usuarioId)
     {
-        $sql = "SELECT p.*
-            FROM preguntas p
-            JOIN categoria c ON p.categoria_id = c.id
-            WHERE c.nombre = ?
-            ORDER BY RAND()
-            LIMIT 1";
+        $sql = "
+        SELECT p.*
+        FROM preguntas p
+        JOIN categoria c ON p.categoria_id = c.id
+        LEFT JOIN preguntas_respondidas pr 
+            ON pr.pregunta_id = p.id 
+            AND pr.usuario_id = ?
+        WHERE c.nombre = ?
+        AND pr.pregunta_id IS NULL
+        ORDER BY RAND()
+        LIMIT 1
+    ";
 
         $stmt = $this->conexion->prepare($sql);
-        $stmt->bind_param("s", $categoria);
+        $stmt->bind_param("is", $usuarioId, $categoria);
         $stmt->execute();
 
         return $stmt->get_result()->fetch_assoc();
     }
+
 
     public function getConexion()
     {
@@ -155,6 +162,13 @@ class PartidaModel
         return $res ? $res["estado"] : null;
     }
 
+    public function reiniciarPreguntasPartida($usuarioId)
+    {
+        $sql = "DELETE FROM preguntas_respondidas WHERE usuario_id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+    }
 
 
 }
