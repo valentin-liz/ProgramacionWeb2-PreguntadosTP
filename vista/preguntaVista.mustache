@@ -129,6 +129,12 @@
                             mensaje.classList.add("text-success");
                             mensaje.classList.remove("text-danger");
 
+                        }  if (data.error){
+
+                            mensaje.innerHTML = "¡Ya respondiste!";
+                            mensaje.classList.add("text-success");
+                            mensaje.classList.remove("text-danger");
+
                         } else if (data.partidaFinalizada) {
 
                             window.location.href = "/partida/resumen?partidaId=" + data.partidaId;
@@ -136,8 +142,10 @@
 
                         modal.show();
                     });
+
         });
     });
+
 
 </script>
 

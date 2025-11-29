@@ -50,6 +50,8 @@ class PartidaController
             $cat['last'] = ($i === count($categorias) - 1);
         }
 
+        $_SESSION['pregunta_respondida'] = false;
+
         $this->renderer->render("partidaIniciada", [
             "categorias" => $categorias
         ]);
@@ -79,9 +81,20 @@ class PartidaController
             exit;
         }
 
+        if ($_SESSION['pregunta_respondida'] === true) {
+
+            $partidaId = $_SESSION["partida_id"];
+            $this->model->clearPreguntaActual($partidaId);
+            header("Location: /partida/ruleta");
+            exit;
+        }
+
+        $_SESSION['pregunta_respondida'] = false;
+
         $pregunta = $this->model->getPreguntaActual($partidaId);
 
-        if ($pregunta === null) {
+
+        if ($pregunta === null ) {
 
             $pregunta = $this->model->getPreguntaPorCategoria($categoria, $usuarioId);
 
@@ -161,6 +174,16 @@ class PartidaController
             return;
         }
 
+        $_SESSION['pregunta_respondida'] = true;
+
+        // Antes de procesar la respuesta
+        $preguntaActual = $this->model->getPreguntaActual($partidaId);
+
+        if (!$preguntaActual || $preguntaId != $preguntaActual['id']) {
+            echo json_encode(["error" => "Pregunta ya respondida"]);
+            return;
+        }
+
 
         // Delegar validación al modelo
         $resultado = $this->model->verificarRespuesta($preguntaId, $respuesta);
@@ -230,6 +253,8 @@ class PartidaController
         }
 
         $this->model->setRuletaMostrada($partidaId);
+
+        $_SESSION['pregunta_respondida'] = false;
 
         $this->renderer->render("partidaIniciada", [
             "categorias" => $categorias
