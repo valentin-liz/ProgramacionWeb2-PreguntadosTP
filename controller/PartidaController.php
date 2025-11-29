@@ -22,6 +22,22 @@ class PartidaController
             exit;
         }
 
+        if (isset($_SESSION["partida_id"])) {
+
+            $partidaId = $_SESSION["partida_id"];
+
+            // Finalizar la partida anterior
+            $this->model->finalizarPartida($partidaId);
+
+            // Limpiar la sesión para permitir nueva partida
+            unset($_SESSION["partida_id"]);
+
+            // Redirigir al resumen
+            header("Location: /partida/resumen?partidaId=" . $partidaId);
+
+            exit;
+        }
+
         // 2. Crear la partida
         $partidaId = $this->model->crearPartida($usuarioId);
 
@@ -59,29 +75,57 @@ class PartidaController
         $estado = $this->model->getEstadoPartida($partidaId);
 
         if ($estado !== 'jugando') {
-            header("Location: /partida/resumen?partida=$partidaId");
+            header("Location: /partida/resumen?partidaId=$partidaId");
             exit;
         }
 
-        $pregunta = $this->model->getPreguntaPorCategoria($categoria, $usuarioId);
+        $pregunta = $this->model->getPreguntaActual($partidaId);
 
-        if (!$pregunta) {
-
-            $this->model->reiniciarPreguntasPartida($usuarioId);
+        if ($pregunta === null) {
 
             $pregunta = $this->model->getPreguntaPorCategoria($categoria, $usuarioId);
+
+            if (!$pregunta) {
+
+                $this->model->reiniciarPreguntasPartida($usuarioId);
+
+                $pregunta = $this->model->getPreguntaPorCategoria($categoria, $usuarioId);
+
+                $this->model->setPreguntaActual($partidaId, $pregunta["id"]);
+
+            }
+
+            $this->model->setPreguntaActual($partidaId, $pregunta["id"]);
         }
 
-        $this->model->setPreguntaActual($partidaId, $pregunta["id"]);
+        $partida = $this->model->getPartida($partidaId);
+
+        $inicio = strtotime($partida["inicio_pregunta"]);
+        $limite = (int)$partida["tiempo_limite_seg"];
+
+        if (!$inicio || !$limite) {
+            // por seguridad, reiniciar a 35s
+            $inicio = time();
+            $limite = 35;
+        }
+
+        $restante = $limite - (time() - $inicio);
+
+        $restante = (int) max(0, $restante);
+
+        if ($restante < 0) $restante = 0;
 
         $this->renderer->render("pregunta", [
             "categoria" => $categoria,
-            "pregunta" => $pregunta
+            "pregunta" => $pregunta,
+            "tiempo_restante" => $restante,
+            "partida_id" => $partidaId
         ]);
     }
 
     public function responder()
     {
+
         if (!isset($_POST["id_pregunta"]) || !isset($_POST["respuesta"])) {
             echo json_encode(["error" => "Datos incompletos"]);
             return;
@@ -103,6 +147,20 @@ class PartidaController
             return;
         }
 
+        if ($respuesta === "timeout") {
+
+            $this->model->finalizarPartida($partidaId);
+            $this->model->clearPreguntaActual($partidaId);
+            $this->model->clearRuletaMostrada($partidaId);
+
+            echo json_encode([
+                "correcta" => false,
+                "partidaFinalizada" => true,
+                "partidaId" => $partidaId
+            ]);
+            return;
+        }
+
 
         // Delegar validación al modelo
         $resultado = $this->model->verificarRespuesta($preguntaId, $respuesta);
@@ -114,6 +172,8 @@ class PartidaController
         if ($resultado["correcta"]) {
 
             $this->model->sumarPunto($partidaId, $usuarioId);
+            $this->model->clearPreguntaActual($partidaId);
+            $this->model->clearRuletaMostrada($partidaId);
 
             echo json_encode([
                 "correcta" => true,
@@ -123,6 +183,8 @@ class PartidaController
         }
 
         $this->model->finalizarPartida($partidaId);
+        $this->model->clearPreguntaActual($partidaId);
+        $this->model->clearRuletaMostrada($partidaId);
 
         echo json_encode([
             "correcta" => false,
@@ -136,6 +198,26 @@ class PartidaController
 
     public function ruleta()
     {
+
+        $partidaId = $_SESSION["partida_id"];
+
+        $ruletaMostrada = $this->model->getRuletaMostrada($partidaId);
+
+
+        if ($ruletaMostrada === 1) {
+
+            // Finalizar la partida anterior
+            $this->model->finalizarPartida($partidaId);
+
+            // Limpiar la sesión para permitir nueva partida
+            unset($_SESSION["partida_id"]);
+
+            // Redirigir al resumen
+            header("Location: /partida/resumen?partidaId=" . $partidaId);
+
+            exit;
+        }
+
         if (!isset($_SESSION["partida_id"])) {
             header("Location: /login/login");
             exit;
@@ -147,9 +229,12 @@ class PartidaController
             $cat['last'] = ($i === count($categorias) - 1);
         }
 
+        $this->model->setRuletaMostrada($partidaId);
+
         $this->renderer->render("partidaIniciada", [
             "categorias" => $categorias
         ]);
+
     }
 
     public function salir()

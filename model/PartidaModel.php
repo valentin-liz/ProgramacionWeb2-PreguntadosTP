@@ -58,7 +58,13 @@ class PartidaModel
 
     public function setPreguntaActual($partidaId, $preguntaId)
     {
-        $sql = "UPDATE partida SET pregunta_actual_id = ?, last_activity = NOW() WHERE id = ?";
+        $sql = "UPDATE partida 
+                SET pregunta_actual_id = ?, 
+                    last_activity = NOW(),
+                    inicio_pregunta = NOW(),
+                    tiempo_limite_seg = 35 
+                WHERE id = ?";
+
         $stmt = $this->conexion->prepare($sql);
         $stmt->bind_param("ii", $preguntaId, $partidaId);
         $stmt->execute();
@@ -169,6 +175,98 @@ class PartidaModel
         $stmt->bind_param("i", $usuarioId);
         $stmt->execute();
     }
+
+    public function preguntaExpirada($partidaId)
+    {
+        $sql = "SELECT inicio_pregunta, tiempo_limite_seg 
+            FROM partida WHERE id = ?";
+
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $partidaId);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+
+        if (!$res) return true;
+
+        $inicio = strtotime($res["inicio_pregunta"]);
+        $limite = $res["tiempo_limite_seg"];
+
+        return (time() - $inicio) > $limite;
+    }
+
+    public function setPreguntaActualSinReiniciarTiempo($partidaId, $preguntaId)
+    {
+        $sql = "UPDATE partida 
+            SET pregunta_actual_id = ?, 
+                last_activity = NOW()
+            WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("ii", $preguntaId, $partidaId);
+        $stmt->execute();
+    }
+
+    public function getPreguntaById($id)
+    {
+        $sql = "SELECT * FROM preguntas WHERE id = ? LIMIT 1";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function getPreguntaActual($partidaId)
+    {
+        $sql = "
+    SELECT p.*
+    FROM partida pa
+    JOIN preguntas p ON pa.pregunta_actual_id = p.id
+    WHERE pa.id = ?
+    LIMIT 1";
+
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $partidaId);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function clearPreguntaActual($partidaId)
+    {
+        $sql = "UPDATE partida
+            SET pregunta_actual_id = NULL,
+                inicio_pregunta = NULL,
+                tiempo_limite_seg = NULL,
+                last_activity = NOW()
+            WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $partidaId);
+        $stmt->execute();
+    }
+
+    public function setRuletaMostrada($partidaId) {
+        $query = "UPDATE partida SET ruleta_mostrada = 1 WHERE id = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $partidaId);
+        $stmt->execute();
+    }
+
+    public function clearRuletaMostrada($partidaId) {
+        $query = "UPDATE partida SET ruleta_mostrada = 0 WHERE id = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $partidaId);
+        $stmt->execute();
+    }
+
+    public function getRuletaMostrada($partidaId)
+    {
+        $sql = "SELECT ruleta_mostrada FROM partida WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $partidaId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+
+        return $result ? (int)$result['ruleta_mostrada'] : null;
+    }
+
 
 
 }

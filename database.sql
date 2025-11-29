@@ -386,6 +386,11 @@ CREATE TABLE partida
     FOREIGN KEY (pregunta_actual_id) REFERENCES preguntas (id)
 );
 
+-- --------------------------------------------------------
+
+--
+-- Creo la tabla 'preguntas_respondidas'
+--
 
 CREATE TABLE preguntas_respondidas
 (
@@ -399,4 +404,30 @@ CREATE TABLE preguntas_respondidas
     FOREIGN KEY (pregunta_id) REFERENCES preguntas (id)
 );
 
+-- --------------------------------------------------------
 
+--
+-- Agrego columnas inicio_pregunta y timepo_limite_seg a la tabla 'partida'
+--
+
+ALTER TABLE partida
+    ADD COLUMN inicio_pregunta DATETIME NULL,
+    ADD COLUMN tiempo_limite_seg INT DEFAULT 35;
+
+-- --------------------------------------------------------
+
+--
+-- Actualizo la zona horaria para que sea igual a la de php y asi comprar para el timer
+--
+
+SET GLOBAL time_zone = '+00:00';
+SET time_zone = '+00:00';
+
+-- --------------------------------------------------------
+
+--
+-- Agrego columnas inicio_pregunta y timepo_limite_seg a la tabla 'partida'
+--
+
+ALTER TABLE partida
+    ADD COLUMN ruleta_mostrada TINYINT(1) DEFAULT 0;

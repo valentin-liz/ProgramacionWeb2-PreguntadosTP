@@ -10,6 +10,9 @@
 <body>
 
 <div class="pregunta-container">
+
+    <div id="timerBox" class="timer">Tiempo <h2 id="timer">{{tiempo_restante}}</h2></div>
+
     <h2 class="categoria-titulo">Categoría: {{categoria}}</h2>
 
     <div class="pregunta-box">
@@ -56,20 +59,56 @@
 
 <script>
 
-    window.addEventListener("beforeunload", function (event) {
-        // Si la nueva URL NO inicia con tu dominio → abandono real
-        const nextUrl = document.activeElement?.href;
+    const partidaId = Number("{{partida_id}}");
 
-        if (!nextUrl || !nextUrl.startsWith(window.location.origin)) {
-            navigator.sendBeacon("/partida/marcarAbandono");
-        }
+    // 1. Insertar estado actual en el historial
+    history.pushState({page: "partida"}, "", window.location.href);
+
+    // 2. Detectar "atrás"
+    window.addEventListener("popstate", function (event) {
+
+        fetch("/partida/marcarAbandono", { method: "POST", body: `partidaId=${partidaId}` })
+                .finally(() => window.location.href = "/partida/resumen?partidaId=" + partidaId);
     });
 
+    let tiempo = Number("{{tiempo_restante}}") || 0;
 
+    const timerElem = document.getElementById("timer");
+    const timerBox = document.getElementById("timerBox");
+
+    let intervalo = setInterval(() => {
+        tiempo--;
+        timerElem.textContent = tiempo;
+
+        if (tiempo <= 5) timerBox.style.color = "red";
+
+        if (tiempo <= 0) {
+            clearInterval(intervalo);
+
+            // Aviso visual opcional
+            timerElem.textContent = "0";
+
+            // Forzar verificación al backend
+            const idTimeout = document.querySelector("input[name='id_pregunta']").value;
+            fetch("/partida/responder", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `id_pregunta=${encodeURIComponent(idTimeout)}&respuesta=timeout`
+            })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.partidaFinalizada) {
+                            window.location.href = "/partida/resumen?partidaId=" + partidaId;
+                        }
+                    });
+        }
+
+    }, 1000);
 
     document.querySelectorAll(".opcion-btn").forEach(btn => {
         btn.addEventListener("click", function (e) {
             e.preventDefault();
+            clearInterval(intervalo); // <--- cortar el timer al responder
 
             const respuesta = this.value;
             const id = document.querySelector("input[name='id_pregunta']").value;
@@ -99,6 +138,7 @@
                     });
         });
     });
+
 </script>
 
 </body>
