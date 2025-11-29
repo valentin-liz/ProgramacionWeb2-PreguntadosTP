@@ -50,6 +50,8 @@ class PartidaController
             $cat['last'] = ($i === count($categorias) - 1);
         }
 
+        $_SESSION["ultima_pregunta_id"] = null;
+
         $_SESSION['pregunta_respondida'] = false;
 
         $this->renderer->render("partidaIniciada", [
@@ -94,7 +96,7 @@ class PartidaController
         $pregunta = $this->model->getPreguntaActual($partidaId);
 
 
-        if ($pregunta === null ) {
+        if ($pregunta === null) {
 
             $pregunta = $this->model->getPreguntaPorCategoria($categoria, $usuarioId);
 
@@ -111,6 +113,8 @@ class PartidaController
             $this->model->setPreguntaActual($partidaId, $pregunta["id"]);
         }
 
+        $_SESSION["ultima_pregunta_id"] = $pregunta["id"];
+
         $partida = $this->model->getPartida($partidaId);
 
         $inicio = strtotime($partida["inicio_pregunta"]);
@@ -124,7 +128,7 @@ class PartidaController
 
         $restante = $limite - (time() - $inicio);
 
-        $restante = (int) max(0, $restante);
+        $restante = (int)max(0, $restante);
 
         if ($restante < 0) $restante = 0;
 
@@ -132,7 +136,8 @@ class PartidaController
             "categoria" => $categoria,
             "pregunta" => $pregunta,
             "tiempo_restante" => $restante,
-            "partida_id" => $partidaId
+            "partida_id" => $partidaId,
+            "ultima_pregunta_id" => $_SESSION["ultima_pregunta_id"] ?? null
         ]);
     }
 
@@ -274,13 +279,14 @@ class PartidaController
 
         unset($_SESSION["partida_id"]);
 
-        header("Location: /partida/resumen?partidaId=".$partidaId);
+        header("Location: /partida/resumen?partidaId=" . $partidaId);
     }
 
 
     public function resumen()
     {
         $partidaId = $_GET["partidaId"] ?? null;
+        $ultimaPreguntaId = $_SESSION["ultima_pregunta_id"];
 
         if (!$partidaId) {
             die("Partida no encontrada");
@@ -290,6 +296,7 @@ class PartidaController
         unset($_SESSION["partida_id"]);
 
         $data = $this->model->obtenerResumenPartida($partidaId);
+        $data["ultima_pregunta_id"] = $ultimaPreguntaId;
 
         $this->renderer->render("resumenPartida", $data);
     }
@@ -303,6 +310,22 @@ class PartidaController
         }
     }
 
+    public function guardarReporte()
+    {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (!$data || !isset($data["id_pregunta"]) || !isset($data["mensaje"])) {
+            echo json_encode(["ok" => false, "error" => "Datos incompletos"]);
+            return;
+        }
+
+        $preguntaId = $data["id_pregunta"];
+        $mensaje = $data["mensaje"];
+
+        $this->model->guardarReporte($preguntaId, $mensaje);
+
+        echo json_encode(["ok" => true]);
+    }
 
 
 }

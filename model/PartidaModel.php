@@ -267,6 +267,17 @@ class PartidaModel
         return $result ? (int)$result['ruleta_mostrada'] : null;
     }
 
+    public function guardarReporte($preguntaId, $mensaje)
+    {
+        $sql = "INSERT INTO reportes (pregunta_id, mensaje) 
+            VALUES (?, ?)";
+
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("is", $preguntaId, $mensaje);
+        $stmt->execute();
+    }
+
+
 
 
 }

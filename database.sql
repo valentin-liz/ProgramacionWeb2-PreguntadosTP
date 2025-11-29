@@ -417,15 +417,6 @@ ALTER TABLE partida
 -- --------------------------------------------------------
 
 --
--- Actualizo la zona horaria para que sea igual a la de php y asi comprar para el timer
---
-
-SET GLOBAL time_zone = '+00:00';
-SET time_zone = '+00:00';
-
--- --------------------------------------------------------
-
---
 -- Agrego columnas inicio_pregunta y timepo_limite_seg a la tabla 'partida'
 --
 

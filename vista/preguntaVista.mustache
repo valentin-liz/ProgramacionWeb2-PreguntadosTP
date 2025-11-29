@@ -47,9 +47,36 @@
             </div>
 
             <div class="modal-footer">
+
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Reportar
+                </button>
+
                 <a href="/partida/ruleta" class="btn btn-primary">Volver a girar</a>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REPORTE -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Reportar</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating">
+                    <textarea class="form-control" id="mensajeReporte" placeholder="Contanos, que querias reportar..." style="height: 100px"></textarea>
+                    <label for="mensajeReporte">Mensaje</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark" id="btnEnviarReporte">Enviar reporte</button>
+            </div>
         </div>
     </div>
 </div>
@@ -144,6 +171,41 @@
                     });
 
         });
+    });
+
+
+    document.getElementById("btnEnviarReporte").addEventListener("click", async () => {
+        const mensaje = document.getElementById("mensajeReporte").value.trim();
+
+        if (mensaje.length < 5) {
+            alert("Escribe un mensaje más detallado.");
+            return;
+        }
+
+        const data = {
+            id_pregunta: {{ultima_pregunta_id}},       // Mustache
+            mensaje: mensaje
+        };
+
+        const res = await fetch("/partida/guardarReporte", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        const json = await res.json();
+
+        if (json.ok) {
+            alert("Reporte enviado correctamente.");
+            let modal = bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
+            modal.hide();
+
+            document.getElementById("mensajeReporte").value = ""; // limpiar
+        } else {
+            alert("Error al enviar el reporte.");
+        }
     });
 
 

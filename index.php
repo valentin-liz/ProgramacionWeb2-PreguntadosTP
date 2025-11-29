@@ -1,6 +1,7 @@
 <?php
 
-date_default_timezone_set('UTC');
+//date_default_timezone_set('UTC');
+date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 session_start();
 
@@ -49,6 +50,7 @@ $accessControl = [
         "salir" => ["jugador"],
         "resumen" => ["jugador"],
         "marcarAbandono" => ["jugador"],
+        "guardarReporte" => ["jugador"],
     ],
 
     "SugerirPregunta" => [
