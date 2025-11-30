@@ -1,6 +1,4 @@
 <?php
-include_once("model/PerfilModel.php"); // COMENTAR
-include_once("helper/AuthHelper.php"); // COMENTAR Y SACAR (SI EL ROL SE PUEDE OBTENER ES PORQUE YA ESTA LOGUEADO)
 
 class PerfilController
 {
@@ -13,36 +11,51 @@ class PerfilController
         $this->renderer = $renderer;
     }
 
+    public function obtenerRolUsuarioLogueado(){
+        return $_SESSION['rol'];
+    }
+
     public function mostrarPerfil()
     {
-        AuthHelper::checkLogin(); // COMENTAR (LA RAZON ESTA ARRIBA AL PRINCIPIO)
 
         $usuario = $_SESSION['usuario'];
         $usuarioId = $_SESSION['usuario_id'];
 
         $datos = $this->model->obtenerUsuario($usuario);
-        $stats = $this->model->obtenerStats($usuarioId);
 
         // Marcar sexo
         $datos["is_masculino"] = ($datos["sexo"] === "Masculino");
         $datos["is_femenino"]  = ($datos["sexo"] === "Femenino");
         $datos["is_otro"]      = ($datos["sexo"] === "Prefiero no cargarlo");
 
-        // Marcar el sexo seleccionado para Mustache
-        $datos["is_masculino"] = ($datos["sexo"] === "Masculino");
-        $datos["is_femenino"]  = ($datos["sexo"] === "Femenino");
-        $datos["is_otro"]      = ($datos["sexo"] === "Otro");
+        switch ($this->obtenerRolUsuarioLogueado()) {
 
-        $this->renderer->render("perfil", [
-            "usuario" => $datos,
-            "stats" => $stats,
-            "logueado" => true
-        ]);
+            case 'jugador':
+
+                $stats = $this->model->obtenerStats($usuarioId);
+
+                $this->renderer->render("perfil", [
+                    "usuario" => $datos,
+                    "stats" => $stats,
+                    "logueado" => true
+                ]);
+
+                break;
+
+            case 'editor':
+
+                $this->renderer->render("perfilEditor", [
+                    "usuario" => $datos,
+                    "logueado" => true
+                ]);
+
+                break;
+        }
+
     }
 
     public function actualizarPerfil()
     {
-        AuthHelper::checkLogin();
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $usuario = $_SESSION['usuario'];
