@@ -43,6 +43,16 @@ class HomeController{
 
                 $this->renderer->render("homeEditor", $data);
                 break;
+
+            case 'administrador':
+
+                $data = [
+                    "usuario" => $_SESSION["usuario"],
+                    "logueado" => true
+                ];
+
+                $this->renderer->render("adminDashboard", $data);
+                break;
         }
     }
 
