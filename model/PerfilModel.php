@@ -130,4 +130,19 @@ class PerfilModel
             "nivel" => $nivel
         ];
     }
+
+    public function obtenerPartidasPorUsuario($usuarioId)
+    {
+        $sql = "SELECT id, puntos, inicio, tiempo_total_seg
+            FROM partida 
+            WHERE usuario_id = ?
+            ORDER BY inicio DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
 }

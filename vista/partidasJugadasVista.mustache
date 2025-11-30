@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Partidas jugadas</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Leaflet MAP -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+</head>
+<body>
+
+<a href="/home/mostrarHome" class="btn btn-outline-secondary fw-semibold ms-5 mt-5">Volver</a>
+
+<ul class="nav nav-pills justify-content-center mt-5 mb-5">
+    <li class="nav-item">
+        <a class="nav-link text-dark fw-semibold" href="/perfil/mostrarPerfil">Mi perfil</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link bg-dark fw-semibold active" aria-current="page" href="/perfil/mostrarPartidasJugadas">Partidas jugadas</a>
+    </li>
+</ul>
+
+<h2 class="text-center mb-4">Partidas jugadas</h2>
+
+<div class="container p-4 rounded border border-light-subtle">
+
+    <table class="table table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Puntos</th>
+            <th scope="col">Inicio</th>
+            <th scope="col">Tiempo total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#partidas}}
+            <tr class="fila-partida">
+                <th scope="row">{{id}}</th>
+                <td>{{puntos}}</td>
+                <td>{{inicio}}</td>
+                <td>{{tiempo_total_seg}}</td>
+            </tr>
+        {{/partidas}}
+        </tbody>
+    </table>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

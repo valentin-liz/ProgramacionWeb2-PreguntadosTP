@@ -102,4 +102,17 @@ class PerfilController
         exit;
     }
 
+    public function mostrarPartidasJugadas() {
+
+        $usuarioId = $_SESSION['usuario_id'];
+
+        $partidas = $this->model->obtenerPartidasPorUsuario($usuarioId);
+
+        $this->renderer->render("partidasJugadas", [
+            "partidas" => $partidas,
+            "logueado" => true
+        ]);
+
+    }
+
 }

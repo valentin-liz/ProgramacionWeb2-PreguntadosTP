@@ -34,6 +34,7 @@ $accessControl = [
 
     "Perfil" => [
         "mostrarPerfil" => ["jugador", "editor", "administrador"],
+        "mostrarPartidasJugadas" => ["jugador"],
         "actualizarPerfil" => ["jugador"],
         "logout" => ["jugador", "editor", "administrador"],
     ],
