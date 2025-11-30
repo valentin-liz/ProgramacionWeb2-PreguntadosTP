@@ -26,6 +26,7 @@ class LoginController
             if ($resultado) {
                 $_SESSION["usuario"] = $resultado["usuario"];
                 $_SESSION["rol"] = $resultado["rol"];
+                $_SESSION["usuario_id"] = $resultado["id"];
 
                 header("Location: /home/mostrarHome");
 

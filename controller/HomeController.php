@@ -12,31 +12,15 @@ class HomeController{
         $this->renderer = $renderer;
     }
 
-//    public function autenticarUsuarioLogueado(){
-//        AuthHelper::checkLogin();
-//    }
-//
-//    public function autenticarQueUsuarioSeaJugador(){
-//        AuthHelper::verificarJugador();
-//    }
-//
-//    public function autenticarQueUsuarioSeaEditor(){
-//        AuthHelper::verificarEditor();
-//    }
-
     public function obtenerRolUsuarioLogueado(){
         return $_SESSION['rol'];
     }
 
     public function mostrarHome(){
 
-        //$this->autenticarUsuarioLogueado();
-
         switch ($this->obtenerRolUsuarioLogueado()) {
 
             case 'jugador':
-
-                //$this->autenticarQueUsuarioSeaJugador();
 
                 $data = [
                     "usuario" => $_SESSION["usuario"],
@@ -48,8 +32,6 @@ class HomeController{
                 break;
 
             case 'editor':
-
-                //$this->autenticarQueUsuarioSeaEditor();
 
                 $preguntas = $this->model->getTodasLasPreguntas();
 
