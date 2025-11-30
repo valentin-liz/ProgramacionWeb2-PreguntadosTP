@@ -13,7 +13,6 @@ class AdminController
 
     public function dashboard()
     {
-        session_start();
 
         if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "administrador") {
             die("403 - No tenés permiso para ver este reporte");
@@ -21,6 +20,7 @@ class AdminController
 
         $tipo = $_GET["periodo"] ?? "mes";
         $fechaBase = $_GET["fecha"] ?? date("Y-m-d");
+        if (!$fechaBase) $fechaBase = date("Y-m-d");
 
         [$desde, $hasta] = $this->model->calcularRangoFechas($tipo, $fechaBase);
 
@@ -30,20 +30,22 @@ class AdminController
             "desde" => $desde,
             "hasta" => $hasta,
 
-            "cantidadUsuarios" => $this->model->getCantidadUsuarios($desde,$hasta),
-            "cantidadPartidas" => $this->model->getCantidadPartidas($desde,$hasta),
-            "cantidadPreguntasJuego" => $this->model->getCantidadPreguntasJuego($desde,$hasta),
-            "cantidadPreguntasCreadas" => $this->model->getCantidadPreguntasCreadas($desde,$hasta),
-            "cantidadUsuariosNuevos" => $this->model->getCantidadUsuariosNuevos($desde,$hasta),
+            "cantidadUsuarios" => $this->model->getCantidadUsuarios(),
+            "cantidadPartidas" => $this->model->getCantidadPartidas(),
+            "cantidadPreguntasJuego" => $this->model->getCantidadPreguntasJuego(),
+            "cantidadPreguntasCreadas" => $this->model->getCantidadPreguntasCreadas(),
+            "cantidadUsuariosNuevos" => $this->model->getCantidadUsuariosNuevos($desde, $hasta),
 
-            "porcentajeAciertos" => $this->model->getPorcentajeAciertosPorUsuario($desde,$hasta),
-            "usuariosPorPais" => $this->model->getUsuariosPorPais($desde,$hasta),
-            "usuariosPorSexo" => $this->model->getUsuariosPorSexo($desde,$hasta),
-            "usuariosPorGrupoEdad" => $this->model->getUsuariosPorGrupoEdad($desde,$hasta),
+            "porcentajeAciertos" => $this->model->getPorcentajeAciertosPorUsuario(),
+            "usuariosPorPais" => $this->model->getUsuariosPorPais(),
+            "usuariosPorSexo" => $this->model->getUsuariosPorSexo(),
+            "usuariosPorGrupoEdad" => $this->model->getUsuariosPorGrupoEdad(),
         ];
 
-        // JSON de aciertos
         $data["porcentajeAciertos_JSON"] = json_encode($data["porcentajeAciertos"]);
+        $data["usuariosPorPais_JSON"] = json_encode($data["usuariosPorPais"]);
+        $data["usuariosPorSexo_JSON"] = json_encode($data["usuariosPorSexo"]);
+        $data["usuariosPorGrupoEdad_JSON"] = json_encode($data["usuariosPorGrupoEdad"]);
 
         $this->renderer->render("adminDashboard", $data);
     }

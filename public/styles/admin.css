@@ -1,82 +1,102 @@
 body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        .filtros {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .tarjetas {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        .tarjeta {
-            flex: 1 1 200px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background: #f9f9f9;
-        }
-        .tarjeta .numero {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .grid-graficos {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        .grafico-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background: #fff;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 10px;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 6px 8px;
-            text-align: left;
-        }
-        th {
-            background: #eee;
-        }
-        .btn-imprimir {
-            padding: 8px 14px;
-            background: #007bff;
-            border: none;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .btn-imprimir:hover {
-            background: #0056b3;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 20px;
         }
 
-        /* ==========================
-           Estilos para impresión
-           ========================== */
+        h1 {
+            color: #003f6b;
+            text-align: center;
+        }
+
+        /* FILTROS */
+        .filtros {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .filtros label {
+            font-size: 14px;
+        }
+
+        .filtros select, .filtros input {
+            padding: 5px;
+        }
+
+        /* TARJETAS */
+        .tarjetas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tarjeta {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #003f6b;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .tarjeta .numero {
+            font-size: 28px;
+            font-weight: bold;
+            color: #003f6b;
+            margin-top: 8px;
+        }
+
+        /* GRAFICOS */
+        .grid-graficos {
+            margin-top: 30px;
+            display: grid;
+            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        }
+
+        .grafico-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .grafico-card h2 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        /* TABLAS */
+        table {
+            width: 100%;
+            margin-top: 35px;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table th, table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table th {
+            background: #003f6b;
+            color: white;
+        }
+
+        /* PRINT */
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                margin: 0;
-                font-size: 12px;
-            }
+            .no-print { display: none !important; }
+            table { page-break-after: always; }
         }
