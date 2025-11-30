@@ -1,5 +1,6 @@
 {
     "require": {
-        "mustache/mustache": "*"
+        "mustache/mustache": "*",
+        "phpmailer/phpmailer": "^7.0"
     }
 }
