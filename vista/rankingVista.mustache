@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+
+<a href="/home/mostrarHome" class="btn btn-outline-secondary fw-semibold ms-5 mt-5">Volver</a>
+
+<h1 class="fw-bold text-center mt-5 mb-5">Ranking</h1>
+
+<div class="container p-4 rounded border border-light-subtle">
+
+    <table class="table table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">Puesto</th>
+            <th scope="col">Jugador</th>
+            <th scope="col">Ratio</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#usuarios}}
+            <tr class="fila-jugador"
+                data-nombre="{{usuario}}"
+                data-puntos="{{puntos}}"
+                data-partidas="{{partidas_jugadas}}"
+                data-foto="{{foto_perfil}}"
+                data-nivel="{{nivel}}">
+                <th scope="row">{{puesto}}</th>
+                <td>{{usuario}}</td>
+                <td>{{ratio}}</td>
+            </tr>
+        {{/usuarios}}
+        </tbody>
+    </table>
+
+
+<!-- Modal jugador -->
+<div class="modal fade" id="modalJugador" tabindex="-1" aria-labelledby="modalJugadorLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalJugadorLabel">Perfil del jugador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+
+                <img id="fotoJugador" src="" class="rounded-circle mb-3" width="120" height="120" alt="Foto de perfil">
+
+                <h4 class="fs-3" id="nombreJugador"></h4>
+                
+                <p class="mb-1">Puntos totales: <span id="puntosJugador"></span></p>
+                <p class="mb-1">Partidas jugadas: <span id="partidasJugador"></span></p>
+
+                <h5 class="mt-3">Nivel: <span id="nivelJugador" class="fw-bold"></span></h5>
+
+                <div class="mt-4">
+                    <h6 class="fw-bold">Código QR del jugador</h6>
+                    <img id="qrJugador" src="" width="160" height="160" alt="QR del jugador">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+<script src="../public/js/ranking.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+.agregarPregutnaFormContainer {
+    width: 30vw !important;
+}
+
+
+@media (max-width: 1400px) {
+    .agregarPregutnaFormContainer {
+        width: 30vw !important;
+    }
+}
+
+@media (max-width: 1100px) {
+    .agregarPregutnaFormContainer {
+        width: 40vw !important;
+    }
+}
+
+@media (max-width: 650px) {
+    .agregarPregutnaFormContainer {
+        width: 75vw !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .agregarPregutnaFormContainer {
+        width: 100vw !important;
+    }
+}

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pregunta - {{categoria}}</title>
+    <link rel="stylesheet" href="../public/styles/preguntaStyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="pregunta-container">
+
+    <div id="timerBox" class="timer">Tiempo <h2 id="timer">{{tiempo_restante}}</h2></div>
+
+    <h2 class="categoria-titulo">Categoría: {{categoria}}</h2>
+
+    <div class="pregunta-box">
+        <h3 class="pregunta-text">{{pregunta.pregunta}}</h3>
+    </div>
+
+    <form class="opciones-container" method="POST">
+
+        <input type="hidden" name="id_pregunta" value="{{pregunta.id}}">
+
+        <button type="button" class="opcion-btn" value="A">{{pregunta.opcion_a}}</button>
+        <button type="button" class="opcion-btn" value="B">{{pregunta.opcion_b}}</button>
+        <button type="button" class="opcion-btn" value="C">{{pregunta.opcion_c}}</button>
+        <button type="button" class="opcion-btn" value="D">{{pregunta.opcion_d}}</button>
+
+    </form>
+</div>
+
+
+<!-- MODAL RESULTADO -->
+<div class="modal fade" id="resultadoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Resultado</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <h3 id="mensajeResultado" class="fw-bold"></h3>
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Reportar
+                </button>
+
+                <a href="/partida/ruleta" class="btn btn-primary">Volver a girar</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REPORTE -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Reportar</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating">
+                    <textarea class="form-control" id="mensajeReporte" placeholder="Contanos, que querias reportar..." style="height: 100px"></textarea>
+                    <label for="mensajeReporte">Mensaje</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark" id="btnEnviarReporte">Enviar reporte</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    const partidaId = Number("{{partida_id}}");
+
+    // 1. Insertar estado actual en el historial
+    history.pushState({page: "partida"}, "", window.location.href);
+
+    // 2. Detectar "atrás"
+    window.addEventListener("popstate", function (event) {
+
+        fetch("/partida/marcarAbandono", { method: "POST", body: `partidaId=${partidaId}` })
+                .finally(() => window.location.href = "/partida/resumen?partidaId=" + partidaId);
+    });
+
+    let tiempo = Number("{{tiempo_restante}}") || 0;
+
+    const timerElem = document.getElementById("timer");
+    const timerBox = document.getElementById("timerBox");
+
+    let intervalo = setInterval(() => {
+        tiempo--;
+        timerElem.textContent = tiempo;
+
+        if (tiempo <= 5) timerBox.style.color = "red";
+
+        if (tiempo <= 0) {
+            clearInterval(intervalo);
+
+            // Aviso visual opcional
+            timerElem.textContent = "0";
+
+            // Forzar verificación al backend
+            const idTimeout = document.querySelector("input[name='id_pregunta']").value;
+            fetch("/partida/responder", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `id_pregunta=${encodeURIComponent(idTimeout)}&respuesta=timeout`
+            })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.partidaFinalizada) {
+                            window.location.href = "/partida/resumen?partidaId=" + partidaId;
+                        }
+                    });
+        }
+
+    }, 1000);
+
+    document.querySelectorAll(".opcion-btn").forEach(btn => {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            clearInterval(intervalo); // <--- cortar el timer al responder
+
+            const respuesta = this.value;
+            const id = document.querySelector("input[name='id_pregunta']").value;
+
+            fetch("/partida/responder", {
+                method: "POST",
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: `id_pregunta=${id}&respuesta=${respuesta}`
+            })
+                    .then(res => res.json())
+                    .then(data => {
+                        const modal = new bootstrap.Modal(document.getElementById("resultadoModal"));
+                        const mensaje = document.getElementById("mensajeResultado");
+
+                        if (data.correcta) {
+
+                            mensaje.innerHTML = "🎉 ¡Respuesta correcta!";
+                            mensaje.classList.add("text-success");
+                            mensaje.classList.remove("text-danger");
+
+                        }  if (data.error){
+
+                            mensaje.innerHTML = "¡Ya respondiste!";
+                            mensaje.classList.add("text-success");
+                            mensaje.classList.remove("text-danger");
+
+                        } else if (data.partidaFinalizada) {
+
+                            window.location.href = "/partida/resumen?partidaId=" + data.partidaId;
+                        }
+
+                        modal.show();
+                    });
+
+        });
+    });
+
+
+    document.getElementById("btnEnviarReporte").addEventListener("click", async () => {
+        const mensaje = document.getElementById("mensajeReporte").value.trim();
+
+        if (mensaje.length < 5) {
+            alert("Escribe un mensaje más detallado.");
+            return;
+        }
+
+        const data = {
+            id_pregunta: {{ultima_pregunta_id}},       // Mustache
+            mensaje: mensaje
+        };
+
+        const res = await fetch("/partida/guardarReporte", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        const json = await res.json();
+
+        if (json.ok) {
+            alert("Reporte enviado correctamente.");
+            let modal = bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
+            modal.hide();
+
+            document.getElementById("mensajeReporte").value = ""; // limpiar
+        } else {
+            alert("Error al enviar el reporte.");
+        }
+    });
+
+
+</script>
+
+</body>
+</html>
+

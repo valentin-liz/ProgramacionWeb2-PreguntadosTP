@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resumen de la Partida</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f3f3f3;
+        }
+
+        .resumen-box {
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .puntos {
+            font-size: 48px;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h1 class="mt-5 text-center text-danger fw-bold">Partida finalizada</h1>
+
+<div class="resumen-box">
+
+    <h2>Resumen de la Partida</h2>
+
+    <hr>
+
+    <h4>Jugador:</h4>
+    <p>{{usuario}}</p>
+
+    <h4>Puntos obtenidos:</h4>
+    <p class="puntos">{{puntos}}</p>
+
+
+    <h4>Partida - id:</h4>
+    <p>{{id}}</p>
+
+    <h4>Partida - estado:</h4>
+    <p>{{estado}}</p>
+
+    <h4>Partida - inicio:</h4>
+    <p>{{inicio}}</p>
+
+    <h4>Partida - fin:</h4>
+    <p>{{fin}}</p>
+
+    <h4>Partida - tiempo(seg):</h4>
+    <p>{{tiempo_total_seg}}</p>
+
+    <hr>
+    {{#ultima_pregunta_id}}
+        <button class="btn btn-danger w-100 btn-reportar" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                data-idpregunta="{{ultima_pregunta_id}}">
+            Reportar
+        </button>
+    {{/ultima_pregunta_id}}
+    <a href="/home/mostrarHome" class="btn btn-secondary w-100 mt-3">Volver al menú</a>
+</div>
+
+<!-- MODAL REPORTE -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Reportar</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating">
+                    <textarea class="form-control" id="mensajeReporte" placeholder="Contanos, que querias reportar..." style="height: 100px"></textarea>
+                    <label for="mensajeReporte">Mensaje</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark" id="btnEnviarReporte">Enviar reporte</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    document.getElementById("btnEnviarReporte").addEventListener("click", async () => {
+        const mensaje = document.getElementById("mensajeReporte").value.trim();
+
+        if (mensaje.length < 5) {
+            alert("Escribe un mensaje más detallado.");
+            return;
+        }
+
+        const data = {
+            id_pregunta: {{ultima_pregunta_id}},       // Mustache
+            mensaje: mensaje
+        };
+
+        const res = await fetch("/partida/guardarReporte", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        const json = await res.json();
+
+        if (json.ok) {
+            alert("Reporte enviado correctamente.");
+            let modal = bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
+            modal.hide();
+
+            document.getElementById("mensajeReporte").value = ""; // limpiar
+        } else {
+            alert("Error al enviar el reporte.");
+        }
+    });
+
+</script>
+</body>
+</html>

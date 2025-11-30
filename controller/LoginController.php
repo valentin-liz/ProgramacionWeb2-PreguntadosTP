@@ -16,15 +16,8 @@ class LoginController
         $this->login();
     }
 
-    public function loginForm()
-    {
-        $data = [
-            "logueado" => false
-        ];
-        $this->renderer->render("login", $data);
-    }
-
     public function login()
+
     {
 
         if (isset($_POST["usuario"]) && isset($_POST["password"])) {
@@ -32,28 +25,26 @@ class LoginController
 
             if ($resultado) {
                 $_SESSION["usuario"] = $resultado["usuario"];
-                $this->redirectToIndex();
+                $_SESSION["rol"] = $resultado["rol"];
+                $_SESSION["usuario_id"] = $resultado["id"];
+
+                header("Location: /home/mostrarHome");
+
             } else {
+
                 $this->renderer->render("login", ["error" => "Usuario o clave incorrecta"]);
             }
         } else {
             // Primera vez que se entra al login, sin enviar form
-            $this->renderer->render("login");
+            $data = [
+                "logueado" => false
+            ];
+            $this->renderer->render("login", $data);
         }
 
     }
 
-    public function logout()
-    {
-        session_destroy();
-        $this->redirectToIndex();
-    }
-
-    public function redirectToIndex()
-    {
-        header("Location: /home/mostrarHome");
-        exit;
-    }
 
 }
+
 
