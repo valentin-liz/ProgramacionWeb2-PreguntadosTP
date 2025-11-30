@@ -422,3 +422,25 @@ ALTER TABLE partida
 
 ALTER TABLE partida
     ADD COLUMN ruleta_mostrada TINYINT(1) DEFAULT 0;
+
+-- --------------------------------------------------------
+
+--
+-- Agrego columnas nivel, hits, vistos y ratio a la tabla 'usuarios'
+--
+
+ALTER TABLE usuarios
+    ADD COLUMN nivel ENUM('nuevo', 'basico', 'medio', 'experto') NOT NULL DEFAULT 'nuevo',
+    ADD COLUMN hits INT NOT NULL DEFAULT 0,
+    ADD COLUMN vistos INT NOT NULL DEFAULT 0,
+    ADD COLUMN ratio FLOAT NOT NULL DEFAULT 0;
+
+-- --------------------------------------------------------
+
+--
+-- Agrego columnas nivel y ratio a la tabla 'preguntas'
+--
+
+ALTER TABLE preguntas
+    ADD COLUMN nivel ENUM('facil', 'normal', 'dificil') NOT NULL DEFAULT 'normal',
+    ADD COLUMN ratio FLOAT NOT NULL DEFAULT 0;

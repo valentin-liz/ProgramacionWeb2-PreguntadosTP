@@ -167,6 +167,9 @@ class PartidaController
 
         if ($respuesta === "timeout") {
 
+            $this->model->actualizarStatsDeUsuario($usuarioId, false);
+            $this->model->actualizarStatsDePregunta($preguntaId, false);
+
             $this->model->finalizarPartida($partidaId);
             $this->model->clearPreguntaActual($partidaId);
             $this->model->clearRuletaMostrada($partidaId);
@@ -199,6 +202,9 @@ class PartidaController
         // Actualizar puntos si es correcta
         if ($resultado["correcta"]) {
 
+            $this->model->actualizarStatsDeUsuario($usuarioId, true);
+            $this->model->actualizarStatsDePregunta($preguntaId, true);
+
             $this->model->sumarPunto($partidaId, $usuarioId);
             $this->model->clearPreguntaActual($partidaId);
             $this->model->clearRuletaMostrada($partidaId);
@@ -209,6 +215,9 @@ class PartidaController
             ]);
             return;
         }
+
+        $this->model->actualizarStatsDeUsuario($usuarioId, false);
+        $this->model->actualizarStatsDePregunta($preguntaId, false);
 
         $this->model->finalizarPartida($partidaId);
         $this->model->clearPreguntaActual($partidaId);

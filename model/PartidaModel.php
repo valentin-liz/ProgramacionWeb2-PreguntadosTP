@@ -18,6 +18,39 @@ class PartidaModel
 
     public function getPreguntaPorCategoria($categoria, $usuarioId)
     {
+//        $sql = "
+//        SELECT p.*
+//        FROM preguntas p
+//        JOIN categoria c ON p.categoria_id = c.id
+//        LEFT JOIN preguntas_respondidas pr
+//            ON pr.pregunta_id = p.id
+//            AND pr.usuario_id = ?
+//        WHERE c.nombre = ?
+//        AND pr.pregunta_id IS NULL
+//        ORDER BY RAND()
+//        LIMIT 1
+//    ";
+//
+//        $stmt = $this->conexion->prepare($sql);
+//        $stmt->bind_param("is", $usuarioId, $categoria);
+//        $stmt->execute();
+//
+//        return $stmt->get_result()->fetch_assoc();
+
+        // 1. Traer el nivel del usuario
+        $sql = "SELECT nivel FROM usuarios WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        $nivelUsuario = $stmt->get_result()->fetch_assoc()["nivel"];
+
+        // 2. Determinar niveles permitidos según el nivel del usuario
+        $nivelesPermitidos = $this->nivelesPermitidosSegunUsuario($nivelUsuario);
+
+        // 3. Preparar placeholders para el IN()
+        $nivelesStr = "'" . implode("','", $nivelesPermitidos) . "'";
+
+        // 4. Preparar query adaptada
         $sql = "
         SELECT p.*
         FROM preguntas p
@@ -27,6 +60,7 @@ class PartidaModel
             AND pr.usuario_id = ?
         WHERE c.nombre = ?
         AND pr.pregunta_id IS NULL
+        AND p.nivel IN ($nivelesStr)
         ORDER BY RAND()
         LIMIT 1
     ";
@@ -36,6 +70,8 @@ class PartidaModel
         $stmt->execute();
 
         return $stmt->get_result()->fetch_assoc();
+
+
     }
 
 
@@ -242,14 +278,16 @@ class PartidaModel
         $stmt->execute();
     }
 
-    public function setRuletaMostrada($partidaId) {
+    public function setRuletaMostrada($partidaId)
+    {
         $query = "UPDATE partida SET ruleta_mostrada = 1 WHERE id = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $partidaId);
         $stmt->execute();
     }
 
-    public function clearRuletaMostrada($partidaId) {
+    public function clearRuletaMostrada($partidaId)
+    {
         $query = "UPDATE partida SET ruleta_mostrada = 0 WHERE id = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $partidaId);
@@ -277,7 +315,123 @@ class PartidaModel
         $stmt->execute();
     }
 
+    public function actualizarStatsDeUsuario($usuarioId, $acerto)
+    {
+        // 1) sumar vistos
+        $sql = "UPDATE usuarios SET vistos = vistos + 1 WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
 
+        // 2) si acertó, sumar hit
+        if ($acerto) {
+            $sql = "UPDATE usuarios SET hits = hits + 1 WHERE id = ?";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bind_param("i", $usuarioId);
+            $stmt->execute();
+        }
+
+        // 3) recalcular ratio
+        $sql = "UPDATE usuarios 
+            SET ratio = CASE 
+                WHEN vistos = 0 THEN 0 
+                ELSE hits / vistos 
+            END
+            WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+
+        // 4) actualizar nivel según ratio
+        $sql = "UPDATE usuarios
+            SET nivel = CASE
+                WHEN vistos < 5 THEN 'nuevo'
+                WHEN vistos >= 10 AND ratio >= 0.70 THEN 'experto'
+                WHEN vistos >= 5 AND ratio >= 0.40 AND ratio < 0.70 THEN 'medio'
+                WHEN vistos >= 10 AND ratio < 0.40 THEN 'basico'
+                ELSE 'medio'
+            END
+            WHERE id = ?";
+
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+    }
+
+
+    public function actualizarStatsDePregunta($preguntaId, $acerto)
+    {
+        // 1) sumar vista
+        $sql = "UPDATE preguntas SET veces_vista = veces_vista + 1 WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+
+        // 2) si acertó sumar acierto
+        if ($acerto) {
+            $sql = "UPDATE preguntas SET veces_acertada = veces_acertada + 1 WHERE id = ?";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bind_param("i", $preguntaId);
+            $stmt->execute();
+        }
+
+        // 3) recalcular ratio
+        $sql = "UPDATE preguntas 
+            SET ratio = CASE 
+                WHEN veces_vista = 0 THEN 0
+                ELSE veces_acertada / veces_vista
+            END
+            WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+
+        // 4) actualizar nivel según ratio
+        $sql = "UPDATE preguntas
+            SET nivel = CASE
+                WHEN veces_vista < 5 THEN 'normal'
+                WHEN ratio < 0.40 THEN 'dificil'
+                WHEN ratio < 0.70 THEN 'normal'
+                ELSE 'facil'
+            END
+            WHERE id = ?";
+
+        $sql = "UPDATE preguntas
+            SET nivel = CASE
+                WHEN veces_vista < 5 THEN 'normal'
+                WHEN veces_vista >= 10 AND ratio >= 0.70 THEN 'facil'
+                WHEN veces_vista >= 5 AND ratio >= 0.40 AND ratio < 0.70 THEN 'normal'
+                WHEN veces_vista >= 10 AND ratio < 0.40 THEN 'dificil'
+                ELSE 'normal'
+            END
+            WHERE id = ?";
+
+
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+    }
+
+    private function nivelesPermitidosSegunUsuario($nivelUsuario)
+    {
+        switch ($nivelUsuario) {
+
+            case 'nuevo':
+                return ['facil', 'normal'];
+
+            case 'basico':
+                return ['facil'];
+
+            case 'medio':
+                return ['normal'];
+
+            case 'experto':
+                return ['normal', 'dificil'];
+
+            default:
+                return ['normal']; // fallback
+        }
+    }
 
 
 }
