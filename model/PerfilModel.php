@@ -101,18 +101,18 @@ class PerfilModel
         $stmt->execute();
         $usuario = $stmt->get_result()->fetch_assoc();
 
-        $puntosTotales = $usuario["puntos_totales"] ?? 0;
+        $puntosTotales = $usuario["puntos"] ?? 0;
         $nivel = $usuario["nivel"] ?? "nuevo";
 
 
-        // 2. Cantidad de partidas jugadas
-        $sql = "SELECT COUNT(*) AS cantidad FROM partida WHERE usuario_id = ?";
+        // 2. Cantidad de partidas jugadas (desde la tabla usuarios)
+        $sql = "SELECT partidas_jugadas FROM usuarios WHERE id = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("i", $usuarioId);
         $stmt->execute();
-        $partidas = $stmt->get_result()->fetch_assoc();
+        $result = $stmt->get_result()->fetch_assoc();
 
-        $partidasJugadas = $partidas["cantidad"] ?? 0;
+        $partidasJugadas = $result["partidas_jugadas"] ?? 0;
 
 
         // 3. Calcular promedio

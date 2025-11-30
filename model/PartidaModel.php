@@ -89,7 +89,15 @@ class PartidaModel
         $stmt->execute();
 
         // devolver el ID de la partida recién creada
-        return $this->conexion->insert_id;
+        $partidaId = $this->conexion->insert_id;
+
+        // Sumar 1 a partidas_jugadas
+        $sql2 = "UPDATE usuarios SET partidas_jugadas = partidas_jugadas + 1 WHERE id = ?";
+        $stmt2 = $this->conexion->prepare($sql2);
+        $stmt2->bind_param("i", $usuarioId);
+        $stmt2->execute();
+
+        return $partidaId;
     }
 
     public function setPreguntaActual($partidaId, $preguntaId)
@@ -138,6 +146,12 @@ class PartidaModel
         $stmt = $this->conexion->prepare($sql);
         $stmt->bind_param("ii", $partidaId, $usuarioId);
         $stmt->execute();
+
+        // Sumar 1 a puntos en la tabla usuarios
+        $sql2 = "UPDATE usuarios SET puntos = puntos + 1 WHERE id = ?";
+        $stmt2 = $this->conexion->prepare($sql2);
+        $stmt2->bind_param("i", $usuarioId);
+        $stmt2->execute();
     }
 
 

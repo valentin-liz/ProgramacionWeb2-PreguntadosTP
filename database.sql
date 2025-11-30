@@ -124,8 +124,8 @@ VALUES (1, 'Ciencia', '#31C950'),
 -- Agregado de columna partidas_jugadas a la tabla `usuarios`
 --
 --
--- ALTER TABLE usuarios
---     ADD COLUMN partidas_jugadas INT DEFAULT 0;
+ALTER TABLE usuarios
+    ADD COLUMN partidas_jugadas INT DEFAULT 0;
 
 -- --------------------------------------------------------
 
