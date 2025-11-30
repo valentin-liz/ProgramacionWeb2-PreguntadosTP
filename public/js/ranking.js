@@ -4,7 +4,8 @@ document.querySelectorAll('.fila-jugador').forEach(fila => {
     fila.addEventListener('click', () => {
 
         const nombre = fila.dataset.nombre;
-        const puntos = fila.dataset.puntos;
+        const vistos = fila.dataset.vistos;
+        const hits = fila.dataset.hits;
         const partidas = fila.dataset.partidas;
         const nivel = fila.dataset.nivel;
 
@@ -14,7 +15,8 @@ document.querySelectorAll('.fila-jugador').forEach(fila => {
 
         // Mostrar datos en el modal
         document.getElementById('nombreJugador').textContent = nombre;
-        document.getElementById('puntosJugador').textContent = puntos;
+        document.getElementById('vistosJugador').textContent = vistos;
+        document.getElementById('hitsJugador').textContent = hits;
         document.getElementById('partidasJugador').textContent = partidas;
         document.getElementById('nivelJugador').textContent = nivel;
         document.getElementById('fotoJugador').src = foto;
