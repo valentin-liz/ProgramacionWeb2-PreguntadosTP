@@ -1,6 +1,6 @@
 <?php
-include_once("model/PerfilModel.php");
-include_once("helper/AuthHelper.php");
+include_once("model/PerfilModel.php"); // COMENTAR
+include_once("helper/AuthHelper.php"); // COMENTAR Y SACAR (SI EL ROL SE PUEDE OBTENER ES PORQUE YA ESTA LOGUEADO)
 
 class PerfilController
 {
@@ -15,12 +15,13 @@ class PerfilController
 
     public function mostrarPerfil()
     {
-        AuthHelper::checkLogin();
+        AuthHelper::checkLogin(); // COMENTAR (LA RAZON ESTA ARRIBA AL PRINCIPIO)
 
         $usuario = $_SESSION['usuario'];
+        $usuarioId = $_SESSION['usuario_id'];
 
         $datos = $this->model->obtenerUsuario($usuario);
-        $stats = $this->model->obtenerStats($usuario);
+        $stats = $this->model->obtenerStats($usuarioId);
 
         // Marcar sexo
         $datos["is_masculino"] = ($datos["sexo"] === "Masculino");

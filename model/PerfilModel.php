@@ -85,42 +85,48 @@ class PerfilModel
         return $stmt->execute();
     }
 
-    public function obtenerStats($usuario)
+    public function obtenerStats($usuarioId)
     {
+        /*
+        1) Traer puntos_totales y nivel del usuario
+        2) Traer cantidad de partidas jugadas
+        3) Calcular promedio (puntos / partidas) — si partidas = 0, devolver 0
+        4) Traer nivel
+    */
 
-        // Total de partidas jugadas
-        $sqlTotal = "SELECT COUNT(*) AS total FROM partidas_usuario WHERE usuario = ?";
-        $stmt1 = $this->db->prepare($sqlTotal);
-        $stmt1->bind_param("s", $usuario);
-        $stmt1->execute();
-        $total = $stmt1->get_result()->fetch_assoc()["total"] ?? 0;
+        // 1. Puntos totales y nivel
+        $sql = "SELECT puntos, nivel FROM usuarios WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        $usuario = $stmt->get_result()->fetch_assoc();
 
-        // Respuestas correctas
-        $sqlCorrectas = "SELECT COUNT(*) AS correctas 
-                     FROM partidas_usuario 
-                     WHERE usuario = ? AND respondida_correcta = 1";
-        $stmt2 = $this->db->prepare($sqlCorrectas);
-        $stmt2->bind_param("s", $usuario);
-        $stmt2->execute();
-        $correctas = $stmt2->get_result()->fetch_assoc()["correctas"] ?? 0;
+        $puntosTotales = $usuario["puntos_totales"] ?? 0;
+        $nivel = $usuario["nivel"] ?? "nuevo";
 
-        // Ratio
-        $ratio = $total > 0 ? round($correctas / $total, 2) : 0;
 
-        // Nivel calculado (puede ajustarse)
-        $nivel = floor($ratio * 10);
+        // 2. Cantidad de partidas jugadas
+        $sql = "SELECT COUNT(*) AS cantidad FROM partida WHERE usuario_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        $partidas = $stmt->get_result()->fetch_assoc();
 
-        // Puntos desde usuarios
-        $sqlPuntos = "SELECT puntos FROM usuarios WHERE usuario = ?";
-        $stmt3 = $this->db->prepare($sqlPuntos);
-        $stmt3->bind_param("s", $usuario);
-        $stmt3->execute();
-        $puntos = $stmt3->get_result()->fetch_assoc()["puntos"] ?? 0;
+        $partidasJugadas = $partidas["cantidad"] ?? 0;
+
+
+        // 3. Calcular promedio
+        if ($partidasJugadas > 0) {
+            $promedioPartidasYPuntos = $puntosTotales / $partidasJugadas;
+        } else {
+            $promedioPartidasYPuntos = 0;
+        }
+
 
         return [
-            "puntos" => $puntos,
-            "partidas" => $total,
-            "ratio" => $ratio,
+            "puntos" => $puntosTotales,
+            "partidas" => $partidasJugadas,
+            "promedioPartidasYPuntos" => $promedioPartidasYPuntos,
             "nivel" => $nivel
         ];
     }
