@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de administración - Reportes</title>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="../public/styles/admin.css">
+</head>
+<body>
+
+<h1>Panel de administración - Reportes</h1>
+
+<div class="filtros no-print">
+    <form method="get" action="">
+        <input type="hidden" name="controller" value="admin">
+        <input type="hidden" name="action" value="dashboard">
+
+        <label>Período:
+            <select name="periodo">
+                <option value="dia"   <?= $data['tipoFiltro'] === 'dia'   ? 'selected' : '' ?>>Día</option>
+                <option value="semana"<?= $data['tipoFiltro'] === 'semana'? 'selected' : '' ?>>Semana</option>
+                <option value="mes"   <?= $data['tipoFiltro'] === 'mes'   ? 'selected' : '' ?>>Mes</option>
+                <option value="anio"  <?= $data['tipoFiltro'] === 'anio'  ? 'selected' : '' ?>>Año</option>
+            </select>
+        </label>
+
+        <label>Fecha base:
+            <input type="date" name="fecha" value="<?= htmlspecialchars($data['fechaBase']) ?>">
+        </label>
+
+        <button type="submit">Filtrar</button>
+    </form>
+</div>
+
+<p><strong>Rango aplicado:</strong> <?= htmlspecialchars($data['desde']) ?> a <?= htmlspecialchars($data['hasta']) ?></p>
+
+<button class="btn-imprimir no-print" onclick="window.print()">Imprimir reportes (tablas)</button>
+
+<!-- TARJETAS RESUMEN -->
+<div class="tarjetas">
+    <div class="tarjeta">
+        <div>Cantidad de jugadores (usuarios)</div>
+        <div class="numero"><?= (int)$data['cantidadUsuarios'] ?></div>
+    </div>
+    <div class="tarjeta">
+        <div>Cantidad de partidas jugadas</div>
+        <div class="numero"><?= (int)$data['cantidadPartidas'] ?></div>
+    </div>
+    <div class="tarjeta">
+        <div>Cantidad de preguntas en el juego</div>
+        <div class="numero"><?= (int)$data['cantidadPreguntasJuego'] ?></div>
+    </div>
+    <div class="tarjeta">
+        <div>Cantidad de preguntas creadas (sugerencias)</div>
+        <div class="numero"><?= (int)$data['cantidadPreguntasCreadas'] ?></div>
+    </div>
+    <div class="tarjeta">
+        <div>Usuarios nuevos en el período</div>
+        <div class="numero"><?= (int)$data['cantidadUsuariosNuevos'] ?></div>
+    </div>
+</div>
+
+<!-- GRAFICOS -->
+<div class="grid-graficos no-print">
+
+    <!-- % aciertos por usuario -->
+    <div class="grafico-card">
+        <h2>% preguntas respondidas correctamente por usuario</h2>
+        <canvas id="chartAciertos"></canvas>
+    </div>
+
+    <!-- Usuarios por país -->
+    <div class="grafico-card">
+        <h2>Cantidad de usuarios por país</h2>
+        <canvas id="chartPais"></canvas>
+    </div>
+
+    <!-- Usuarios por sexo -->
+    <div class="grafico-card">
+        <h2>Cantidad de usuarios por sexo</h2>
+        <canvas id="chartSexo"></canvas>
+    </div>
+
+    <!-- Usuarios por grupo de edad -->
+    <div class="grafico-card">
+        <h2>Cantidad de usuarios por grupo de edad</h2>
+        <canvas id="chartEdad"></canvas>
+    </div>
+</div>
+
+<!-- TABLAS (para impresión) -->
+
+<h2>Tabla - % preguntas respondidas correctamente por usuario</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Usuario</th>
+        <th>Total respuestas</th>
+        <th>Correctas</th>
+        <th>% Correctas</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($data['porcentajeAciertos'] as $row): ?>
+        <tr>
+            <td><?= htmlspecialchars($row['usuario']) ?></td>
+            <td><?= (int)$row['total_respuestas'] ?></td>
+            <td><?= (int)$row['correctas'] ?></td>
+            <td><?= number_format($row['porcentaje'], 2) ?> %</td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<h2>Tabla - Usuarios por país</h2>
+<table>
+    <thead>
+    <tr>
+        <th>País / Ciudad</th>
+        <th>Cantidad</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($data['usuariosPorPais'] as $row): ?>
+        <tr>
+            <td><?= htmlspecialchars($row['pais_ciudad']) ?></td>
+            <td><?= (int)$row['cantidad'] ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<h2>Tabla - Usuarios por sexo</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Sexo</th>
+        <th>Cantidad</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($data['usuariosPorSexo'] as $row): ?>
+        <tr>
+            <td><?= htmlspecialchars($row['sexo']) ?></td>
+            <td><?= (int)$row['cantidad'] ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<h2>Tabla - Usuarios por grupo de edad</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Grupo</th>
+        <th>Cantidad</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Menores</td>
+        <td><?= (int)$data['usuariosPorGrupoEdad']['menores'] ?></td>
+    </tr>
+    <tr>
+        <td>Medio</td>
+        <td><?= (int)$data['usuariosPorGrupoEdad']['medio'] ?></td>
+    </tr>
+    <tr>
+        <td>Jubilados</td>
+        <td><?= (int)$data['usuariosPorGrupoEdad']['jubilados'] ?></td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    // Paso datos de PHP a JS
+    const aciertosData = <?= json_encode($data['porcentajeAciertos']) ?>;
+    const usuariosPorPais = <?= json_encode($data['usuariosPorPais']) ?>;
+    const usuariosPorSexo = <?= json_encode($data['usuariosPorSexo']) ?>;
+    const usuariosPorGrupoEdad = <?= json_encode($data['usuariosPorGrupoEdad']) ?>;
+
+    // Chart % aciertos por usuario
+    (function () {
+        const ctx = document.getElementById('chartAciertos').getContext('2d');
+        const labels = aciertosData.map(item => item.usuario);
+        const valores = aciertosData.map(item => parseFloat(item.porcentaje));
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '% correctas',
+                    data: valores
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    })();
+
+    // Chart usuarios por país
+    (function () {
+        const ctx = document.getElementById('chartPais').getContext('2d');
+        const labels = usuariosPorPais.map(item => item.pais_ciudad);
+        const valores = usuariosPorPais.map(item => parseInt(item.cantidad));
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: valores
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    })();
+
+    // Chart usuarios por sexo
+    (function () {
+        const ctx = document.getElementById('chartSexo').getContext('2d');
+        const labels = usuariosPorSexo.map(item => item.sexo);
+        const valores = usuariosPorSexo.map(item => parseInt(item.cantidad));
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: valores
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    })();
+
+    // Chart usuarios por grupo de edad
+    (function () {
+        const ctx = document.getElementById('chartEdad').getContext('2d');
+        const labels = ['Menores', 'Medio', 'Jubilados'];
+        const valores = [
+            parseInt(usuariosPorGrupoEdad.menores),
+            parseInt(usuariosPorGrupoEdad.medio),
+            parseInt(usuariosPorGrupoEdad.jubilados)
+        ];
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: valores
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {beginAtZero: true}
+                }
+            }
+        });
+    })();
+</script>
+
+</body>
+</html>

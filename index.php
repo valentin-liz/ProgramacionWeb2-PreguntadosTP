@@ -79,6 +79,11 @@ $accessControl = [
         "mostrarModificarSugerencia" => ["editor"],
         "guardarModificacion" => ["editor"],
     ],
+
+    "Admin" => [
+        "dashboard" => ["administrador"],
+    ],
+
 ];
 
 // 1. Si el controlador no existe en el ACL ⇒ error 404

@@ -16,6 +16,8 @@ include_once("controller/DetallesDeReporteController.php");
 include_once("controller/SugerenciasController.php");
 include_once("controller/ModificarSugerenciaController.php");
 include_once("controller/SugerirPreguntaController.php");
+include_once("controller/AdminController.php");
+
 
 include_once("model/LoginModel.php");
 include_once("model/RegistrarModel.php");
@@ -30,6 +32,8 @@ include_once("model/DetallesDeReporteModel.php");
 include_once("model/SugerenciasModel.php");
 include_once("model/ModificarSugerenciaModel.php");
 include_once("model/SugerirPreguntaModel.php");
+include_once("model/AdminModel.php");
+
 
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -84,6 +88,9 @@ class ConfigFactory
         $this->objetos["ModificarSugerenciaController"] = new ModificarSugerenciaController(new ModificarSugerenciaModel($this->conexion->getConexion()), $this->renderer);
 
         $this->objetos["SugerirPreguntaController"] = new SugerirPreguntaController(new SugerirPreguntaModel($this->conexion->getConexion()), $this->renderer);
+
+        $this->objetos["AdminController"] = new AdminController(new AdminModel($this->conexion->getConexion()),$this->renderer);
+
 
 
     }
