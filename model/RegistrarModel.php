@@ -28,7 +28,7 @@ class RegistrarModel
     // Validación falsa del email
     public function emailPareceValido($email)
     {
-        $dominiosInvalidos = ['outlook.com', 'yahoo.com']; // Falsa a propósito
+        $dominiosInvalidos = ['yahoo.com']; // Falsa a propósito
 
         $partes = explode('@', $email);
         if (count($partes) !== 2) return false;
