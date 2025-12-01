@@ -29,20 +29,8 @@ class DetallesDeReporteModel
             p.correcta,
             p.veces_vista,
             p.veces_acertada,
-
-            -- ratio como decimal (evita división entera)
-            CASE
-                WHEN p.veces_vista > 0 THEN (p.veces_acertada * 1.0) / p.veces_vista
-                ELSE 0
-            END AS ratio,
-
-            -- clasificación de dificultad según ratio
-            CASE
-                WHEN p.veces_vista = 0 THEN 'Media'
-                WHEN (p.veces_acertada * 1.0) / p.veces_vista >= 0.70 THEN 'Fácil'
-                WHEN (p.veces_acertada * 1.0) / p.veces_vista >= 0.40 THEN 'Media'
-                ELSE 'Difícil'
-            END AS dificultad
+            p.ratio,
+            p.nivel
         FROM reportes r
         JOIN preguntas p ON r.pregunta_id = p.id
         JOIN categoria c ON p.categoria_id = c.id

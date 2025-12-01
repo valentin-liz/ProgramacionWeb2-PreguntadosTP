@@ -46,6 +46,7 @@ class AdminController
         $data["usuariosPorPais_JSON"] = json_encode($data["usuariosPorPais"]);
         $data["usuariosPorSexo_JSON"] = json_encode($data["usuariosPorSexo"]);
         $data["usuariosPorGrupoEdad_JSON"] = json_encode($data["usuariosPorGrupoEdad"]);
+        $data["logueado"] = true;
 
         $this->renderer->render("adminDashboard", $data);
     }

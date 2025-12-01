@@ -35,16 +35,8 @@ class HomeModel
     p.correcta,
     p.veces_vista,
     p.veces_acertada,
-    CASE 
-        WHEN p.veces_vista > 0 THEN p.veces_acertada / p.veces_vista
-        ELSE 0
-    END AS ratio,
-    CASE
-        WHEN p.veces_vista = 0 THEN 'Media'
-        WHEN (p.veces_acertada / p.veces_vista) >= 0.70 THEN 'Fácil'
-        WHEN (p.veces_acertada / p.veces_vista) >= 0.40 THEN 'Media'
-        ELSE 'Difícil'
-    END AS dificultad
+    p.ratio,
+    p.nivel
 FROM preguntas p
 JOIN categoria c ON p.categoria_id = c.id
 ORDER BY p.id;

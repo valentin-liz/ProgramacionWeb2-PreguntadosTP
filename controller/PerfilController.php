@@ -42,6 +42,7 @@ class PerfilController
 
                 break;
 
+            case 'administrador':
             case 'editor':
 
                 $this->renderer->render("perfilEditor", [
