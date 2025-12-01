@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="../public/styles/admin.css">
+</head>
+<body>
+
+<h1>Panel de Administración</h1>
+
+<div class="filtros no-print">
+    <form method="get">
+        <input type="hidden" name="controller" value="admin">
+        <input type="hidden" name="method" value="dashboard">
+
+        <label><b>Período:</b>
+            <select name="periodo">
+                <option value="dia"   {{#isDia}}selected{{/isDia}}>Día</option>
+                <option value="semana"{{#isSemana}}selected{{/isSemana}}>Semana</option>
+                <option value="mes"   {{#isMes}}selected{{/isMes}}>Mes</option>
+                <option value="anio"  {{#isAnio}}selected{{/isAnio}}>Año</option>
+            </select>
+        </label>
+
+        <label><b>Fecha base:</b>
+            <input type="date" name="fecha" value="{{fechaBase}}">
+        </label>
+
+        <button type="submit">Filtrar</button>
+    </form>
+</div>
+
+<p><b>Rango:</b> {{desde}} → {{hasta}}</p>
+
+<button class="no-print" onclick="window.print()">Imprimir reportes</button>
+
+<!-- TARJETAS -->
+<div class="tarjetas">
+    <div class="tarjeta">
+        <div>Usuarios registrados</div>
+        <div class="numero">{{cantidadUsuarios}}</div>
+    </div>
+
+    <div class="tarjeta">
+        <div>Total partidas jugadas</div>
+        <div class="numero">{{cantidadPartidas}}</div>
+    </div>
+
+    <div class="tarjeta">
+        <div>Preguntas en el juego</div>
+        <div class="numero">{{cantidadPreguntasJuego}}</div>
+    </div>
+
+    <div class="tarjeta">
+        <div>Sugerencias enviadas</div>
+        <div class="numero">{{cantidadPreguntasCreadas}}</div>
+    </div>
+
+    <div class="tarjeta">
+        <div>Usuarios nuevos</div>
+        <div class="numero">{{cantidadUsuariosNuevos}}</div>
+    </div>
+</div>
+
+<!-- GRAFICOS -->
+<div class="grid-graficos no-print">
+
+    <div class="grafico-card">
+        <h2>Usuarios por País</h2>
+        <canvas id="chartPais"></canvas>
+    </div>
+
+    <div class="grafico-card">
+        <h2>Usuarios por Sexo</h2>
+        <canvas id="chartSexo"></canvas>
+    </div>
+
+    <div class="grafico-card">
+        <h2>Usuarios por Grupo Etario</h2>
+        <canvas id="chartEdad"></canvas>
+    </div>
+
+</div>
+
+<!-- TABLAS -->
+
+<h2>Tabla — Usuarios por País</h2>
+<table>
+    <tr><th>País</th><th>Cantidad</th></tr>
+    {{#usuariosPorPais}}
+    <tr><td>{{pais_ciudad}}</td><td>{{cantidad}}</td></tr>
+    {{/usuariosPorPais}}
+</table>
+
+
+<h2>Tabla — Usuarios por Sexo</h2>
+<table>
+    <tr><th>Sexo</th><th>Cantidad</th></tr>
+    {{#usuariosPorSexo}}
+    <tr><td>{{sexo}}</td><td>{{cantidad}}</td></tr>
+    {{/usuariosPorSexo}}
+</table>
+
+
+<h2>Tabla — Usuarios por Grupo Etario</h2>
+<table>
+    <tr><th>Grupo</th><th>Cantidad</th></tr>
+    <tr><td>Menores</td><td>{{usuariosPorGrupoEdad.menores}}</td></tr>
+    <tr><td>Medio</td><td>{{usuariosPorGrupoEdad.medio}}</td></tr>
+    <tr><td>Jubilados</td><td>{{usuariosPorGrupoEdad.jubilados}}</td></tr>
+</table>
+
+<script>
+    /* PASO DATOS PHP → JS */
+    const aciertosData = {{{porcentajeAciertos_JSON}}};
+    const usuariosPorPais = {{{usuariosPorPais_JSON}}};
+    const usuariosPorSexo = {{{usuariosPorSexo_JSON}}};
+    const usuariosPorGrupoEdad = {{{usuariosPorGrupoEdad_JSON}}};
+
+    /* GRÁFICO ACIERTOS */
+    new Chart(document.getElementById("chartAciertos"), {
+        type: "bar",
+        data: {
+            labels: aciertosData.map(x => x.usuario),
+            datasets: [{
+                label: "% acierto",
+                data: aciertosData.map(x => x.porcentaje),
+                backgroundColor: "#003f6b"
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    /* GRÁFICO PAÍS */
+    new Chart(document.getElementById("chartPais"), {
+        type: "pie",
+        data: {
+            labels: usuariosPorPais.map(x => x.pais_ciudad),
+            datasets: [{
+                data: usuariosPorPais.map(x => x.cantidad)
+            }]
+        }
+    });
+
+    /* GRÁFICO SEXO */
+    new Chart(document.getElementById("chartSexo"), {
+        type: "doughnut",
+        data: {
+            labels: usuariosPorSexo.map(x => x.sexo),
+            datasets: [{
+                data: usuariosPorSexo.map(x => x.cantidad)
+            }]
+        }
+    });
+
+    /* GRÁFICO EDAD */
+    new Chart(document.getElementById("chartEdad"), {
+        type: "bar",
+        data: {
+            labels: ["Menores", "Medio", "Jubilados"],
+            datasets: [{
+                data: [
+                    usuariosPorGrupoEdad.menores,
+                    usuariosPorGrupoEdad.medio,
+                    usuariosPorGrupoEdad.jubilados
+                ],
+                backgroundColor: "#1d72b8"
+            }]
+        }
+    });
+</script>
+
+</body>
+</html>
+

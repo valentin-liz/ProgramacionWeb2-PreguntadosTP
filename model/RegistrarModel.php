@@ -25,24 +25,17 @@ class RegistrarModel
         return $stmt->execute();
     }
 
-    // 👉 Validación falsa de email
+    // Validación falsa del email
     public function emailPareceValido($email)
     {
-        $dominiosInvalidos = ['outlook.com', 'yahoo.com'];
+        $dominiosInvalidos = ['outlook.com', 'yahoo.com']; // Falsa a propósito
 
         $partes = explode('@', $email);
-
-        if (count($partes) !== 2) {
-            return false;
-        }
+        if (count($partes) !== 2) return false;
 
         $dominio = strtolower($partes[1]);
 
-        if (in_array($dominio, $dominiosInvalidos)) {
-            return false; // ❌ Lo rechazamos a propósito
-        }
-
-        return true;
+        return !in_array($dominio, $dominiosInvalidos);
     }
 
 }
