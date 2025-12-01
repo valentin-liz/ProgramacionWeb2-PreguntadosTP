@@ -16,6 +16,10 @@ include_once("controller/DetallesDeReporteController.php");
 include_once("controller/SugerenciasController.php");
 include_once("controller/ModificarSugerenciaController.php");
 include_once("controller/SugerirPreguntaController.php");
+include_once("controller/CategoriasController.php");
+include_once("controller/AgregarCategoriaController.php");
+include_once("controller/ModificarCategoriaController.php");
+
 
 include_once("model/LoginModel.php");
 include_once("model/RegistrarModel.php");
@@ -30,6 +34,9 @@ include_once("model/DetallesDeReporteModel.php");
 include_once("model/SugerenciasModel.php");
 include_once("model/ModificarSugerenciaModel.php");
 include_once("model/SugerirPreguntaModel.php");
+include_once("model/CategoriasModel.php");
+include_once("model/AgregarCategoriaModel.php");
+include_once("model/ModificarCategoriaModel.php");
 
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -85,6 +92,11 @@ class ConfigFactory
 
         $this->objetos["SugerirPreguntaController"] = new SugerirPreguntaController(new SugerirPreguntaModel($this->conexion->getConexion()), $this->renderer);
 
+        $this->objetos["CategoriasController"] = new CategoriasController(new CategoriasModel($this->conexion->getConexion()), $this->renderer);
+
+        $this->objetos["AgregarCategoriaController"] = new AgregarCategoriaController(new AgregarCategoriaModel($this->conexion->getConexion()), $this->renderer);
+
+        $this->objetos["ModificarCategoriaController"] = new ModificarCategoriaController(new ModificarCategoriaModel($this->conexion->getConexion()), $this->renderer);
 
     }
 

@@ -44,6 +44,7 @@ class ModificarPreguntaController
             if (!isset($_POST[$campo]) || trim($_POST[$campo]) === "") {
 
                 $this->renderer->render("modificarPregunta", [
+                    "logueado" => true,
                     "error" => "Hay campos vacios, vuelva a intentarlo nuevamente"
                 ]);
                 exit();

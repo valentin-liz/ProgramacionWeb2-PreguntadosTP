@@ -10,7 +10,7 @@
 
 <ul class="nav nav-pills justify-content-center mt-5 mb-5">
     <li class="nav-item">
-        <a class="nav-link bg-dark fw-semibold active" aria-current="page" href="/home/mostrarHome">Preguntas</a>
+        <a class="nav-link text-dark fw-semibold " href="/home/mostrarHome">Preguntas</a>
     </li>
     <li class="nav-item">
         <a class="nav-link text-dark fw-semibold" href="/reportes/mostrarReportes">Reportes</a>
@@ -19,60 +19,42 @@
         <a class="nav-link text-dark fw-semibold" href="/sugerencias/mostrarSugerencias">Sugerencias</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark fw-semibold" href="/categorias/mostrarCategorias">Categorias</a>
+        <a class="nav-link bg-dark fw-semibold active" aria-current="page" href="/categorias/mostrarCategorias">Categorias</a>
     </li>
 </ul>
 
-<h1 class="text-center fw-bold mb-4">Preguntas</h1>
+<h1 class="text-center fw-bold mb-4">Categorias</h1>
 
 <div class="container-fluid table-responsive">
 
-    <a href="/AgregarPregunta/mostrarAgregarPregunta" class="btn btn-success mb-2">Agregar</a>
+    <a href="/AgregarCategoria/mostrarAgregarCategoria" class="btn btn-success mb-2">Agregar</a>
 
     <table class="table table-bordered align-middle">
         <thead class="table-dark">
         <tr>
             <th scope="col">ID</th>
-            <th scope="col">Pregunta</th>
-            <th scope="col">Categoria</th>
-            <th scope="col">Opcion A</th>
-            <th scope="col">Opcion B</th>
-            <th scope="col">Opcion C</th>
-            <th scope="col">Opcion D</th>
-            <th scope="col">Correcta</th>
-            <th scope="col">Veces vista</th>
-            <th scope="col">Veces acertada</th>
-            <th scope="col">Ratio</th>
-            <th scope="col">Dificultad</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Color</th>
             <th scope="col">Accion</th>
         </tr>
         </thead>
         <tbody>
-        {{#preguntas}}
+        {{#categorias}}
             <tr>
-                <th scope="row">{{pregunta_id}}</th>
-                <td>{{pregunta}}</td>
-                <td>{{categoria}}</td>
-                <td>{{opcion_a}}</td>
-                <td>{{opcion_b}}</td>
-                <td>{{opcion_c}}</td>
-                <td>{{opcion_d}}</td>
-                <td>{{correcta}}</td>
-                <td>{{veces_vista}}</td>
-                <td>{{veces_acertada}}</td>
-                <td>{{ratio}}</td>
-                <td>{{dificultad}}</td>
+                <th scope="row">{{id}}</th>
+                <td>{{nombre}}</td>
+                <td style="background: {{color}}"><p style="color: #ffffff">{{color}}</p></td>
                 <td>
-                    <a href="/modificarPregunta/mostrarModificarPregunta?id={{pregunta_id}}"  class="btn btn-warning fw-semibold text-light mb-1">Modificar</a>
+                    <a href="/modificarCategoria/mostrarModificarCategoria?id={{id}}"  class="btn btn-warning fw-semibold text-light mb-1">Modificar</a>
                     <button class="btn btn-danger fw-semibold mb-1 btn-borrar"
-                            data-id="{{pregunta_id}}"
+                            data-id="{{id}}"
                             data-bs-toggle="modal"
                             data-bs-target="#modalBorrar">
                         Borrar
                     </button>
                 </td>
             </tr>
-        {{/preguntas}}
+        {{/categorias}}
         </tbody>
     </table>
 
@@ -89,12 +71,12 @@
             </div>
 
             <div class="modal-body">
-                ¿Seguro que querés borrar esta pregunta? Esta acción no se puede deshacer.
+                ¿Seguro que querés borrar esta categoria? Esta acción no se puede deshacer.
             </div>
 
             <div class="modal-footer">
-                <form id="formBorrar" method="POST" action="/home/borrarPregunta">
-                    <input type="hidden" name="pregunta_id" id="inputIdBorrar">
+                <form id="formBorrar" method="POST" action="/categorias/borrarCategoria">
+                    <input type="hidden" name="id" id="inputIdBorrar">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-danger">Borrar</button>
                 </form>

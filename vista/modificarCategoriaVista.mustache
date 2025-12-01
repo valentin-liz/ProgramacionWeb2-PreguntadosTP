@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../public/styles/modificarCategoriaStyle.css">
+</head>
+<body>
+
+<a href="/categorias/mostrarCategorias" class="btn btn-outline-secondary fw-semibold ms-5 mt-5">Cancelar</a>
+
+<h1 class="text-center fw-bold mb-4">Modificar categoria</h1>
+
+{{#exito}}
+    <div class="alert alert-success" role="alert">{{exito}}</div>
+{{/exito}}
+
+{{#error}}
+    <div class="alert alert-danger" role="alert">{{error}}</div>
+{{/error}}
+
+<div class="modificarCategoriaFormContainer container-fluid p-5 border border-light-subtle rounded">
+
+    <form method="POST" action="/modificarCategoria/guardarModificacion" >
+
+        <input type="hidden" name="id" value="{{categoria.id}}">
+
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" name="nombre" class="form-control" value="{{categoria.nombre}}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="color" class="form-label">Color</label>
+            <input type="color" name="color" class="form-control" id="color" value="{{categoria.color}}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">Guardar cambios</button>
+
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

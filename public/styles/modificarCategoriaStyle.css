@@ -1,0 +1,28 @@
+.modificarCategoriaFormContainer {
+    width: 30vw !important;
+}
+
+
+@media (max-width: 1400px) {
+    .modificarCategoriaFormContainer {
+        width: 30vw !important;
+    }
+}
+
+@media (max-width: 1100px) {
+    .modificarCategoriaFormContainer {
+        width: 40vw !important;
+    }
+}
+
+@media (max-width: 650px) {
+    .modificarCategoriaFormContainer {
+        width: 75vw !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .modificarCategoriaFormContainer {
+        width: 100vw !important;
+    }
+}
